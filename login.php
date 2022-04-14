@@ -103,7 +103,8 @@ if (isset($_POST['btnlogin'])) {
 
             <div class="col-3 ">
               <div class="site-logo">
-                <a href="<?php echo WEB_ROOT; ?>">Grading System</a>
+                <a href="<?php echo WEB_ROOT; ?>" class="navbar-left navbar-brand">CSVU Portal</a>
+				
               </div>
             </div>
 
@@ -127,25 +128,10 @@ if (isset($_POST['btnlogin'])) {
         <div class="container">
           <div class="row align-items-center">
             <div class="col-lg-5">
-              <h1 class="line-bottom">Online Grading System</h1>
+              <h1 class="line-bottom"><img src="images/csvu-logo.png"/>CSVU<br>Online Grading System </h1>
+			  
             </div>
-            <div class="col-lg-5 ml-auto">
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    
-    <div class="site-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-5 pr-md-5 mr-auto">
-            <h2 class="line-bottom">Sign In</h2>
-            <p>This area, you have to login using your id number in school in order access your account ang view your profile and subject with grades</p>
-          </div>
-          <div class="col-md-6">
+            <div class="col-md-6">
             <div class="quick-contact-form bg-white">
                 <h2>Sign In</h2>
                 <form action="login.php" method="POST">
@@ -161,9 +147,13 @@ if (isset($_POST['btnlogin'])) {
                 </form>
               </div>
           </div>
+          </div>
         </div>
       </div>
     </div>
+
+    
+
     <footer >
       <div class="container">
          
@@ -171,9 +161,7 @@ if (isset($_POST['btnlogin'])) {
           <div class="col-md-12">
             <div class="border-top pt-5">
               <p>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved 
             </p>
             </div>
           </div>
