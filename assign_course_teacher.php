@@ -106,7 +106,7 @@ else if(loggedIn() && (privilege()==='teacher' || privilege()==='dppc' || privil
 	                </section>
 
 		<!-- jQuery 2.0.2 -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js" integrity="sha512-ew6biq+ZLL9Oatatxp3TMwzqfYWjPNVj555KxiE2mV5Sc2/1Z5SOWSbViBH+KXU788ESsXDa5m0cgRKTBqO44w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- AJAX FORM -->
         <script type="text/javascript" src="js/jquery.form.js"></script>
 		<script type="text/javascript" src="js/assign_course_teacher.js"></script>

@@ -199,8 +199,6 @@ if (Input::exists()) {
     <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
-    <!--Google Fonts-->
-    <link href='http://fonts.googleapis.com/css?family=Balthazar&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
     <!--Font Awesome-->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">

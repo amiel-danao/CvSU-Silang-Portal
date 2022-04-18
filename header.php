@@ -43,7 +43,7 @@ if(!loggedIn()){
         <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css">
         
        <!--Google Fonts-->
-    <link href='http://fonts.googleapis.com/css?family=Balthazar&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    
     </head>
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->

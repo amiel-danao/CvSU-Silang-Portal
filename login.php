@@ -162,7 +162,7 @@ if (Input::exists()) {
 </head>
 <body>
     <!--Google Fonts-->
-    <link href='http://fonts.googleapis.com/css?family=Balthazar&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    
 
     <!--Font Awesome-->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -230,8 +230,8 @@ if (Input::exists()) {
                 <h1 class="title"><strong>CSVU Portal</strong></h1>
                 <form role="form" method="post" action="login.php">
                     <div class="form-group input-group">
-						<span rel="tooltip" data-original-title="Institute Email. e.g., ripon@cse.nits.ac.in" class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input rel="tooltip" data-original-title="Institute Email. e.g., ripon@cse.nits.ac.in" type="text" class="form-control text-center text" id="" placeholder="Institute Email" value="<?php echo Input::get('a'); ?>" name="a">
+						<span rel="tooltip" data-original-title="email" class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input rel="tooltip" data-original-title="email" type="text" class="form-control text-center text" id="" placeholder="Institute Email" value="<?php echo Input::get('a'); ?>" name="a">
                     </div>
                     <div class="form-group input-group">
 						<span rel="tooltip" data-original-title="Password" class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
