@@ -1,13 +1,5 @@
 <?php
 require_once 'includes/recaptchalib.php';
-/**
- * @package MIS
- * @name Recaptcha
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
 class Recaptcha{
 		private $_publicKey, // 6LeJHPASAAAAAB18OTV1cFXz9GCzPNLrHCDA-Gdv
 				$_privateKey; //6LeJHPASAAAAAIhLbqgwF8FX6lxoGNCLZXiRfDSx

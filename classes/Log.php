@@ -1,12 +1,4 @@
 <?php
-/**
- * @package MIS
- * @name Log
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
 class Log {
 	private $filename;
 	

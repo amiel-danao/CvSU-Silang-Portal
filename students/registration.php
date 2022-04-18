@@ -49,7 +49,7 @@ if(Input::get('step')==1){
                <!-- Form Name -->
                <div class="well">
                   <center>
-                     <legend>Online Semester Registration<br />NATIONAL INSTITUTE OF TECHNOLOGY, SILCHAR</legend>
+                     <legend>Online Semester Registration<br />CSVU - Portal</legend>
                      <h4>Step 1 of 3</h4>
                   </center>
                   
@@ -259,10 +259,7 @@ Pincode
 State"></textarea>
 					</td>
 					<td>
-						<textarea name="hostel_address" class="form-control" style="resize: none;" rows="4" placeholder="Room No. XX, Hostel No. XX
-NIT Silchar
-788010
-Assam"></textarea>
+						<textarea name="hostel_address" class="form-control" style="resize: none;" rows="4" placeholder=""></textarea>
 					</td>
 				
 				</tr>
@@ -291,7 +288,7 @@ if(Input::get('step')==2){
                <!-- Form Name -->
                <div class="well">
                   <center>
-                     <legend>Online Semester Registration<br />NATIONAL INSTITUTE OF TECHNOLOGY, SILCHAR</legend>
+                     <legend>Online Semester Registration<br />CSVU - Portal</legend>
                      <h4>Step 2 of 3</h4>
                   </center>
                   

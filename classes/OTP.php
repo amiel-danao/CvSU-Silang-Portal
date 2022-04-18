@@ -1,12 +1,4 @@
 <?php
-/**
- * @package MIS
- * @name OTP
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
 class OTP{
 		private $_mobile,
 				$_message,
@@ -28,7 +20,7 @@ class OTP{
 
 				$this->generateOTP();
 				$this->_mobile =$mobile ;
-				$this->_message = 'Your One Time Password for MIS/SIS login is '.$this->_CODE.'. NIT Silchar 2015.';
+				$this->_message = 'Your One Time Password for MIS/SIS login is '.$this->_CODE;
 
 				// API call to send sms
 				$sms = new SMS();
@@ -93,66 +85,5 @@ class OTP{
 			}
 	}
 
-/** Using OTP Class.. Required : Input Class, Session Class, Redirect Class, init.php
-**
-********************************************************************************************************
-********************************************************************************************************
-********************************************************************************************************
-****<?php																							****
-****require_once 'core/init.php';																	****
-****																								****
-****if(!Input::exists()){																			****
-****		?>																						****
-****        <form method="post" action="index.php">													****
-****        <input type="text" maxlength="10" placeholder="Enter Mobile Number" name="mobile"><br/>	****
-****        <input type="submit" value="Send OTP">													****
-****        </form>																					****
-****        <?php																					****
-****	}																							****
-****else if(Input::exists() && Input::get('mobile')!=''){											****
-****		$otp = new OTP();																		****
-****		if($otp->send(Input::get('mobile')) && Session::loginAttempt('OTP')){					****
-****				Session::put('OTP Sending', 'OTP Sent Successfully');							****
-****				Redirect::to('index.php');														****
-****			}																					****
-****		else{																					****
-****				echo "OTP Sending Error ... login attempt = " . Session::loginAttempts('OTP');	****
-****			}																					****
-****	}																							****
-****if(Session::exists('OTP Sending')){																****
-****		echo Session::get('OTP Sending') . "<br/>";												****
-****		Session::delete('OTP Sending');															****
-****		if(Session::loginAttempts('OTP')){														****
-****			?>																					****
-****        <form action="index.php" method="post">													****
-****        <input type="text" maxlength="8" placeholder="Enter OTP Here" name="OTP_response_code"> ****
-****        <input type="submit" Value="Verify">													****
-****        </form>																					****
-****        <?php																					****
-****			}																					****
-****		else{																					****
-****				echo 'You have been blocked.. contact Administrator';							****
-****			}																					****
-****		}																						****
-****if(Input::exists() && Input::get('OTP_response_code')!=''){										****
-****		$otp=new OTP();																			****
-****		if($otp->verifyOTP(Input::get('OTP_response_code'))){									****
-****				Session::deleteloginAttempt('OTP');												****
-****				echo 'Yipppeeee Verified';														****
-****			}																					****
-****		else{																					****
-****				Session::put('OTP Sending', 'Incorrect, Enter Again');							****
-****				if(Session::loginAttempt('OTP')){												****
-****						Redirect::to('index.php');												****
-****					}																			****
-****																								****
-****			}																					****
-****	}																							****
-****?>																								****
-********************************************************************************************************
-********************************************************************************************************
-********************************************************************************************************
-** Created by Harsh Vardhan Ladha // www.harshladha.in //
-**/
 ?>
 

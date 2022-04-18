@@ -1,40 +1,15 @@
 <?php
-/**
- * 
- *
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @version 1.0
- * @copyright Computer Science & Engineering Department, NIT Silchar 
- * @package MIS
- */
-
 if(!loggedIn()){
 	die();
 }
 ?>
 <!Doctype html>
-<!--
-
-Name: National Institute of Technology, Silchar. Management Information System | Login Page
-
-
-AUTHOR
-Design and code by: Harsh Vardhan Ladha & Yogesh Chauhan
-
-
-CREDITS
-Ripon Patgiri
-
-SUPPORT
-E-mail: harsh.ladha@gmail.com , anujsingh432@gmail.com , ripon.patgiri@gmail.com
-
--->
 <html>
     <head>
         <meta charset="UTF-8">
         <link rel="icon" href="images/nits.png">
 		<link rel="shortcut icon" href="images/nits.png" />
-        <title>SIS | NIT Silchar</title>
+        <title>CSVU - Portal</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         
         <!-- bootstrap 3.0.2 -->

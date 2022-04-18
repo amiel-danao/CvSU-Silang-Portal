@@ -11,7 +11,7 @@ if(!loggedIn() || privilege()==NULL){
                 	                    <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="images/logo.png" class="img-circle" alt="NIT Silchar" />
+                            <img src="images/logo.png" class="img-circle"  />
                         </div>
                     </div>
                     <!-- sidebar menu -->

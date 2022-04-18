@@ -1,14 +1,5 @@
 <?php
 
- /**
- * @package MIS
- * @name Admin
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
-
 class Admin{
 	private $_id,
 			$_username,
@@ -49,13 +40,6 @@ class Admin{
 		return $this->_privilege;
 	}
 	
-    /**
-     * createAdmin function is used to create Admin user id for MIS system.
-     *
-     * @return 0,1
-     * @param str $name, str $username, str $password, str $privilege, int $mobile
-     * @author  Harsh Vardhan Ladha
-     */
 	public function createAdmin($name, $username,$password,$mobile){
 		if(1){
 			$this->_connect();

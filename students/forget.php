@@ -1,25 +1,10 @@
 
 <!DOCTYPE html>
-<!--
-Name: National Institute of Technology, Silchar. Management Information System | Login Page
-
-
-AUTHOR
-Design and code by: Harsh Vardhan Ladha & Yogesh Chauhan
-
-
-CREDITS
-Ripon Patgiri
-
-SUPPORT
-E-mail: harsh.ladha@gmail.com , anujsingh432@gmail.com , ripon.patgiri@gmail.com
-
--->
 <html>
 <head>
   <link rel="icon" href="images/nits.png">
   <link rel="shortcut icon" href="images/nits.png" />
-  <title>SIS | NIT Silchar</title>
+  <title>CSVU - Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -48,18 +33,16 @@ E-mail: harsh.ladha@gmail.com , anujsingh432@gmail.com , ripon.patgiri@gmail.com
     <div class="col-sm-6 col-md-5 col-lg-4 col-sm-offset-6 text-center login-popup-wrap">
                       <div class="login-popup">
                         <div id="logo"> </div>
-                        <h1 class="title"><strong>Student Information System</strong></h1>
+                        <h1 class="title"><strong>CSVU - Portal</strong></h1>
                         <ul>
-                          <li>Write an application regarding the password issue to Head CC, NIT Silchar. <a href="http://lms.nits.ac.in/moodle/app/app.pdf" target="_blank">Click Here</a> to download application format.</li>
-                          <li>Get it signed by, One of your branch Faculty "and" HOD.</li>
-                          <li>Submit the application to Head CC, NIT Silchar.</li>
                         </ul>
                         <a href="login.php"><div class="btn btn-danger">Go Back!</div></a>
                       </div>
 
                     <div class="footer">
-                      <b>&copy; 2015</b> <a target="_blank" href="http://www.nits.ac.in">National Institute of Technology, Silchar</a><br/>Proudly developed by <a href="#"><i>Computer Science & Engineering</i></a>
-                      <br/><a target="_blank" href="http://www.harshladha.com"> <b>Harsh Vardhan Ladha</a> &amp; <a target="_blank" href="https://in.linkedin.com/in/yogeshchauhan1">Yogesh Chauhan</b></a><br/>Under the guidance of <a href="#"><i><b>Ripon Patgiri</b></i></a>
+                    <p>
+                      Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+                      </p>
                     </div>
                   </div>
                 </div>

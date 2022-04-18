@@ -1,5 +1,6 @@
-@import url(//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
-@import url(//fonts.googleapis.com/css?family=Kaushan+Script);
+/*@import url(//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
 /*! 
  *   AdminLTE v1.2
  *   Author: AlmsaeedStudio.com
@@ -13,7 +14,7 @@
 html,
 body {
   overflow-x: hidden!important;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   min-height: 100%;
   background: #f9f9f9;
@@ -128,7 +129,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 /* Page Header */
 .page-header {
@@ -555,7 +556,7 @@ body > .header .logo .icon {
   background: transparent;
   margin-top: 0px;
   margin-bottom: 0;
-  font-size: 12px;
+  font-size: 16px;
   padding: 7px 5px;
   position: absolute;
   top: 15px;
@@ -1917,7 +1918,7 @@ Component: timeline
   background-color: #00acd6;
 }
 .btn.btn-danger {
-  background-color: #f56954;
+  background-color: #c41c03;
   border-color: #f4543c;
 }
 .btn.btn-danger:hover,
@@ -2621,13 +2622,13 @@ Component: timeline
   background: #f9f9f9;
 }
 .skin-blue .left-side {
-  background: #f4f4f4;
+  background: #6b6b6b;
   -webkit-box-shadow: inset -3px 0px 8px -4px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: inset -3px 0px 8px -4px rgba(0, 0, 0, 0.1);
   box-shadow: inset -3px 0px 8px -4px rgba(0, 0, 0, 0.07);
 }
 .skin-blue .sidebar a {
-  color: #555555;
+  color: #ffffff;
 }
 .skin-blue .sidebar a:hover {
   text-decoration: none;
@@ -3533,4 +3534,16 @@ fieldset[disabled] .btn-vk.active {
 .btn-vk .badge {
   color: #587ea3;
   background-color: #ffffff;
+}
+
+form > table th{
+  font-weight: normal;
+  font-size:16px;
+  font-family: 'Roboto', sans-serif;
+}
+
+form > table td{
+  font-weight: normal;
+  font-size:16px;
+  font-family: 'Roboto', sans-serif;
 }

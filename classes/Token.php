@@ -1,13 +1,5 @@
 <?php
 
-/**
- * @package MIS
- * @name Token
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
 class Token{
 		/**
 		 * Generates Token for the request. Once per request should be used

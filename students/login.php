@@ -176,21 +176,6 @@ if (Input::exists()) {
 ?>
 
 <!DOCTYPE html>
-<!--
-Name: National Institute of Technology, Silchar. Management Information System | Login Page
-
-
-AUTHOR
-Design and code by: Harsh Vardhan Ladha & Yogesh Chauhan
-
-
-CREDITS
-Ripon Patgiri
-
-SUPPORT
-E-mail: harsh.ladha@gmail.com , anujsingh432@gmail.com , ripon.patgiri@gmail.com
-
--->
 <html>
 <head>
   <link rel="icon" href="images/logo.png">
@@ -287,7 +272,7 @@ E-mail: harsh.ladha@gmail.com , anujsingh432@gmail.com , ripon.patgiri@gmail.com
                         <input rel="tooltip" data-original-title="Scholar Number : e.g, 12-1-5-001 " type="text" class="form-control text-center text" id="" placeholder="Scholar Number" value="<?php echo Input::get('a'); ?>" name="a">
                     </div>
                     <div class="form-group input-group">
-            <span rel="tooltip" data-original-title="Password" class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
+            <span rel="tooltip" data-original-title="Password" class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         <input rel="tooltip" data-original-title="Password" type="password" class="form-control text-center text" id="" placeholder="Password" name="b">
                     </div>
                     <div class="form-group">

@@ -1,12 +1,4 @@
 <?php
-/**
- * @package MIS
- * @name Course
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
 class Course {
     private $_course_id, $_course_name, $_course_credit, $_course_department;
 

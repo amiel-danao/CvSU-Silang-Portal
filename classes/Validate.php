@@ -1,14 +1,4 @@
 <?php
-
-/**
- * Used to validate input fields
- * @package MIS
- * @name Validate
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
 class Validate{
 		private $_passed = false,
 				$_errors = array(),

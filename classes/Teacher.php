@@ -1,12 +1,4 @@
 <?php
-/**
- * @package MIS
- * @name Teacher
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
 class Teacher {
     private $_db, $_id, $_privilege, $_mobile, $_name, $_email, $_department, $_blocked, $_approved;
 

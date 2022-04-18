@@ -1,13 +1,5 @@
 <?php
 error_reporting(1);
-/**
- * @package MIS
- * @name LDAP
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
 class LDAP {
     private $_host, $_port, $_base, $_dn;
 

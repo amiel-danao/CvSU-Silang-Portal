@@ -1,12 +1,4 @@
 <?php
-/**
- * 
- *
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @version 1.0
- * @copyright Computer Science & Engineering Department, NIT Silchar 
- * @package MIS
- */
 
 if(!loggedIn()){
 	die();
@@ -47,7 +39,7 @@ if(!loggedIn()){
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-        
+
         <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css">
         
        <!--Google Fonts-->
@@ -81,24 +73,6 @@ if(!loggedIn()){
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
-                                <li class="user-header bg-light-blue">
-                                	<?php 
-                                	$name = strtolower(preg_replace('/\s+/', '', Session::get('displayname')));
-                                	if(Session::get('teacher_id')!=NULL)
-                                		$id = Session::get('teacher_id');
-                                	else if(Session::get('admin_id')!=NULL)
-                                		$id = Session::get('admin_id');
-                                	else
-                                		$id = '';
-                                	$filepath = "images/profile/".$name.$id.".jpg";
-                                	if(!file_exists($filepath))
-                                		$filepath="images/profile/default.png";
-                                	?>
-                                	<img src=<?php echo $filepath; ?> class="img-circle" alt="User Image">
-                                    <p>
-                                        <?php echo Session::get('displayname'); ?>
-                                    </p>
-                                </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-right">

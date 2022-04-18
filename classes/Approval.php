@@ -1,12 +1,4 @@
 <?php
-/**
- * @package MIS
- * @name Approval
- * @author Harsh Vardhan Ladha & Yogesh Chauhan
- * @copyright Computer Science & Engineering Department, NIT Silchar
- * @link http://mis.nits.ac.in
- * @license NIT Silchar
- */
 class Approval {
     private $_teacher_id, $_course_code, $_course_dep, $_status_level, $_reject_msg, $_db, $_approved_by;
 

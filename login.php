@@ -234,7 +234,7 @@ if (Input::exists()) {
                         <input rel="tooltip" data-original-title="Institute Email. e.g., ripon@cse.nits.ac.in" type="text" class="form-control text-center text" id="" placeholder="Institute Email" value="<?php echo Input::get('a'); ?>" name="a">
                     </div>
                     <div class="form-group input-group">
-						<span rel="tooltip" data-original-title="Password" class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
+						<span rel="tooltip" data-original-title="Password" class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         <input rel="tooltip" data-original-title="Password" type="password" class="form-control text-center text" id="" placeholder="Password" name="b">
                     </div>
                     <!--<div class="form-group input-group" >
@@ -243,10 +243,10 @@ if (Input::exists()) {
                     </div>-->
                     <div class="form-group">
                     	<input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-						<a href="forget.php">Forget Password?</a>
+						
                         <input type="submit" class="btn btn-default submit" value="Sign In" name="login">
                     </div>
-					If you are facing some problem <a href="http://goo.gl/forms/uvqFSLWnIJ" target="_blank"> click here.</a>
+					
                 </form>
             </div>
             <?php

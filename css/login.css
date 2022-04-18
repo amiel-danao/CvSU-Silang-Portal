@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
 html,
 body {
   height: 100%;
@@ -14,10 +17,10 @@ body {
 }
 .mis.login-form {
   height: auto;
-  font-family: 'Balthazar', serif;
+  font-family: 'Roboto', serif;
 }
 .mis.login-form h1 {
-  font-family: 'Balthazar', serif;
+  font-family: 'Roboto', serif;
 }
 .mis.login-form a {
   color: #22A3CC;

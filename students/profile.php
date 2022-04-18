@@ -33,31 +33,15 @@ else{
 	}
 	?>
 	<!Doctype html>
-<!--
-
-Name: National Institute of Technology, Silchar. Management Information System | Login Page
-
-
-AUTHOR
-Design and code by: Harsh Vardhan Ladha & Yogesh Chauhan
-
-
-CREDITS
-Ripon Patgiri
-
-SUPPORT
-E-mail: harsh.ladha@gmail.com , anujsingh432@gmail.com , ripon.patgiri@gmail.com
-
--->
 <html>
     <head>
         <meta charset="UTF-8">
         <link rel="icon" href="//sis.nits.ac.in/images/nits.png">
 		<link rel="shortcut icon" href="//sis.nits.ac.in/images/nits.png" />
-        <title><?php echo $s->getName(); ?> | NIT Silchar</title>
+        <title><?php echo $s->getName(); ?> | CSVU-Portal</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-        <meta description="Public college profile of <?php echo $s->getName(); ?> of National Institute of Technology, Silchar. NIT Silchar.">
-        <meta keywords="<?php echo $s->getName(); ?>, Computer Science and Engineering, Harsh Vardhan Ladha, Yogesh Chauhan, Ripon Patgiri, NIT Silchar, National Institute of Technology, Silchar, Assam, Regional Engineering College, Students profile, Public, Profile, Students">
+        
+        
         
         <!-- bootstrap 3.0.2 -->
         <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -96,14 +80,14 @@ E-mail: harsh.ladha@gmail.com , anujsingh432@gmail.com , ripon.patgiri@gmail.com
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
                 <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="images/nits.png" class="img-circle" alt="NIT Silchar" />
+                            <img src="images/logo.png" class="img-circle"  />
                         </div>
                     </div>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top" role="navigation">
                 <!-- Sidebar toggle button-->
-                <h3 ><a href="http://www.nits.ac.in">राष्ट्रीय प्रौद्योगिकी संस्थान सिलचर<br />National Institute of Technology Silchar</a></h3>
+                <h3 ><a href="#"><br/>CSVU - Portal</a></h3>
                 
                 <div class="navbar-right">
                     <ul class="nav navbar-nav">
@@ -162,8 +146,9 @@ E-mail: harsh.ladha@gmail.com , anujsingh432@gmail.com , ripon.patgiri@gmail.com
 		</div>
 		<div class="col-md-2">
 			<div class="footer">
-           		<b>&copy; 2015</b> <a target="_blank" href="http://www.nits.ac.in">National Institute of Technology, Silchar</a><br/>Proudly developed by<br /><a href="#"><i>Computer Science & Engineering</i></a>
-				<br/><a target="_blank" href="http://www.harshladha.com"><b>Harsh Ladha</a> &amp; <a target="_blank" href="https://in.linkedin.com/in/yogeshchauhan1">Yogesh Chauhan</b></a><br/>Under the guidance of <br /><a href="#"><i><b>Ripon Patgiri</b></i></a>
+					<p>
+					Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+					</p>
             </div>
 		</div>
 		<div class="col-md-1">
