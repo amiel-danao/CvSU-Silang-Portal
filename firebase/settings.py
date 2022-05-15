@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'csvu.pythonanywhere.com/'
+    'csvu.pythonanywhere.com'
     ]
 
 
@@ -106,12 +106,40 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+
+
+# Internationalization
+# https://docs.djangoproject.com/en/4.0/topics/i18n/
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'UTC'
+
+USE_I18N = True
+
+USE_TZ = True
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+STATIC_URL = 'static/'
+
+
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 BATON = {
     'SITE_HEADER': 'CSVU-Portal',
     'SITE_TITLE': 'CSVU-Portal',
     'INDEX_TITLE': 'Site administration',
     'COPYRIGHT': 'copyright © 2022 CSVU - Portal', # noqa
+    'POWERED_BY': '',
     'CONFIRM_UNSAVED_CHANGES': True,
     'SHOW_MULTIPART_UPLOADING': True,
     'ENABLE_IMAGES_PREVIEW': True,
@@ -122,7 +150,7 @@ BATON = {
     'MENU_TITLE': 'Menu',
     'MESSAGES_TOASTS': False,
     'GRAVATAR_DEFAULT_IMG': 'retro',
-    'LOGIN_SPLASH': '/static/admin/images/login.png',
+    'LOGIN_SPLASH': "/static/admin/images/login.jpg",
     'SEARCH_FIELD': {
         'label': 'Search contents...',
         'url': '/search/',
@@ -147,32 +175,10 @@ BATON = {
         },
         { 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
         { 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
-        { 'type': 'free', 'label': 'Custom Link', 'url': 'http://www.google.it', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
-        { 'type': 'free', 'label': 'My parent voice', 'default_open': True, 'children': [
-            { 'type': 'model', 'label': 'A Model', 'name': 'mymodelname', 'app': 'myapp' },
-            { 'type': 'free', 'label': 'Another custom link', 'url': 'http://www.google.it' },
-        ] },
+        #{ 'type': 'free', 'label': 'Custom Link', 'url': 'http://www.google.it', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
+        #{ 'type': 'free', 'label': 'My parent voice', 'default_open': True, 'children': [
+        #    { 'type': 'model', 'label': 'A Model', 'name': 'mymodelname', 'app': 'myapp' },
+        #    { 'type': 'free', 'label': 'Another custom link', 'url': 'http://www.google.it' },
+        #] },
     )
 }
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
