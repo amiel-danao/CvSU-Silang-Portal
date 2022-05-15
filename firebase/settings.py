@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-5%(rt_(_f1(eec4u@2k)l#@dud=k2sx%_=i!^%n$&z^=c0zwlx
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'http://csvu.pythonanywhere.com/'
+    'csvu.pythonanywhere.com/'
     ]
 
 
