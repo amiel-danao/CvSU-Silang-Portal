@@ -35,14 +35,14 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'baton',
     'fireapp',
+    'baton',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',    
+    'django.contrib.staticfiles',
     'baton.autodiscover',
 ]
 
@@ -82,8 +82,12 @@ WSGI_APPLICATION = 'firebase.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'csvu$csvu_database',
+        'USER': 'csvu',
+        'PASSWORD': 'notcommonpassword1234',
+        'HOST': 'csvu.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
 
@@ -138,7 +142,8 @@ BATON = {
     'SITE_HEADER': 'CSVU-Portal',
     'SITE_TITLE': 'CSVU-Portal',
     'INDEX_TITLE': 'CSVU-Portal',
-    'COPYRIGHT': 'copyright © 2022 CSVU - Portal', # noqa
+    'COPYRIGHT': 'copyright © 2022 CSVU - Portal',
+    'SUPPORT_HREF': '',
     'POWERED_BY': '',
     'CONFIRM_UNSAVED_CHANGES': True,
     'SHOW_MULTIPART_UPLOADING': True,
@@ -156,7 +161,7 @@ BATON = {
         'url': '/search/',
     },
     'MENU': (
-        { 'type': 'title', 'label': 'main', 'apps': ('auth', ) },
+        { 'type': 'title', 'label': 'main', 'apps': ('auth', 'fireapp') },
         {
             'type': 'app',
             'name': 'auth',
@@ -170,15 +175,26 @@ BATON = {
                 {
                     'name': 'group',
                     'label': 'Groups'
+                }
+            )
+        },
+        {
+            'type': 'app',
+            'name': 'fireapp',
+            'label': 'Manage',
+            'icon': 'fa fa-tasks',
+            'models': (
+                {
+                    'name': 'course',
+                    'label': 'Courses'
                 },
             )
         },
-        { 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
-        { 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
+        #{ 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
+        #{ 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
         #{ 'type': 'free', 'label': 'Custom Link', 'url': 'http://www.google.it', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
-        #{ 'type': 'free', 'label': 'My parent voice', 'default_open': True, 'children': [
-        #    { 'type': 'model', 'label': 'A Model', 'name': 'mymodelname', 'app': 'myapp' },
-        #    { 'type': 'free', 'label': 'Another custom link', 'url': 'http://www.google.it' },
-        #] },
+        #{ 'type': 'free', 'label': 'Manage', 'default_open': True, 'children': [
+        #    { 'type': 'model', 'label': 'Courses', 'name': 'courses', 'app': 'fireapp' },
+        #] }
     )
 }
