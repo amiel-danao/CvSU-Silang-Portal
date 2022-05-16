@@ -80,16 +80,30 @@ WSGI_APPLICATION = 'firebase.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'csvu$csvu_database',
-        'USER': 'csvu',
-        'PASSWORD': 'notcommonpassword1234',
-        'HOST': 'csvu.mysql.pythonanywhere-services.com',
-        'PORT': '3306',
+
+
+if os.environ.get('DJANGO_ENV') == "LOCAL":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'csvu$csvu_database',
+            'USER': 'root',
+            'PASSWORD': '',
+            'HOST': '127.0.0.1',                 
+            'PORT': '3306', 
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'csvu$csvu_database',
+            'USER': 'csvu',
+            'PASSWORD': 'notcommonpassword1234',
+            'HOST': 'csvu.mysql.pythonanywhere-services.com',
+            'PORT': '3306',
+        }
+    }
 
 
 # Password validation

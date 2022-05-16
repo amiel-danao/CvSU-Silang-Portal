@@ -21,17 +21,6 @@ class AttendanceData(models.Model):
         db_table = 'attendance_data'
 
 
-class Course(models.Model):
-    id = models.BigAutoField(db_column='course_id', primary_key=True)
-    course_name = models.CharField(unique=True, max_length=100)
-    course_department = models.IntegerField()
-    course_credit = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'courses'
-
-
 class Department(models.Model):
     id = models.BigAutoField(db_column='dept_id', primary_key=True)
     name = models.CharField(unique=True, max_length=255)
@@ -39,6 +28,23 @@ class Department(models.Model):
     class Meta:
         managed = False
         db_table = 'department'
+    def __str__(self):
+        return self.name
+
+class Course(models.Model):
+    id = models.BigAutoField(db_column='course_id', primary_key=True)
+    course_name = models.CharField(unique=True, max_length=100)
+    course_abbr = models.CharField(db_column='course_abbr', max_length=20)
+    course_department = models.ForeignKey(
+        Department,
+        on_delete=models.CASCADE,
+        db_column='course_department_id'
+    )
+    course_credit = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'courses'
 
 
 class GradingScale(models.Model):
