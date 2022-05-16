@@ -19,7 +19,7 @@ from fireapp import views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  
-    path('', views.index, name='index'),
-    path('baton/', include('baton.urls'))
+    path('baton/', include('baton.urls')),
+    path('', admin.site.urls)
+
 ]

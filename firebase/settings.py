@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-5%(rt_(_f1(eec4u@2k)l#@dud=k2sx%_=i!^%n$&z^=c0zwlx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -137,7 +137,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 BATON = {
     'SITE_HEADER': 'CSVU-Portal',
     'SITE_TITLE': 'CSVU-Portal',
-    'INDEX_TITLE': 'Site administration',
+    'INDEX_TITLE': 'CSVU-Portal',
     'COPYRIGHT': 'copyright © 2022 CSVU - Portal', # noqa
     'POWERED_BY': '',
     'CONFIRM_UNSAVED_CHANGES': True,
@@ -149,7 +149,7 @@ BATON = {
     'MENU_ALWAYS_COLLAPSED': False,
     'MENU_TITLE': 'Menu',
     'MESSAGES_TOASTS': False,
-    'GRAVATAR_DEFAULT_IMG': 'retro',
+    'GRAVATAR_DEFAULT_IMG': 'mp',
     'LOGIN_SPLASH': "/static/admin/images/login.jpg",
     'SEARCH_FIELD': {
         'label': 'Search contents...',
