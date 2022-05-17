@@ -155,7 +155,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$320000$R4PD0Q3ngCEGwZrvEtlbsv$5i7XhtjjmljUUpNTBCyUHwA0YPYsoHKEuWMXLpMB3CA=','2022-05-16 08:21:58.922925',1,'admin','','','admin@email.com',1,1,'2022-05-15 10:38:00.416000'),(2,'pbkdf2_sha256$320000$sKfuRFsBgJjx6z3JNz8n8E$E4YjN81PBPh7+Qr4/zdVKR0kjVCXNoY2Ebuy/9o7FiI=','2022-05-16 01:17:19.000000',0,'teacher1','teacher1_first_name','teacher1_last_name','teacher1@email.com',1,1,'2022-05-15 23:39:12.000000'),(3,'pbkdf2_sha256$320000$jBuRa74zMbcWQuVqfz56VY$RB8B2RNnQ/KTnCWa0NAYtkqURLHIBWYnU6KY2KycW+c=','2022-05-16 08:22:39.780050',0,'student1','','','',1,1,'2022-05-16 08:21:30.000000');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$320000$R4PD0Q3ngCEGwZrvEtlbsv$5i7XhtjjmljUUpNTBCyUHwA0YPYsoHKEuWMXLpMB3CA=','2022-05-17 01:20:12.884439',1,'admin','','','admin@email.com',1,1,'2022-05-15 10:38:00.416000'),(2,'pbkdf2_sha256$320000$sKfuRFsBgJjx6z3JNz8n8E$E4YjN81PBPh7+Qr4/zdVKR0kjVCXNoY2Ebuy/9o7FiI=','2022-05-16 01:17:19.000000',0,'teacher1','teacher1_first_name','teacher1_last_name','teacher1@email.com',1,1,'2022-05-15 23:39:12.000000'),(3,'pbkdf2_sha256$320000$jBuRa74zMbcWQuVqfz56VY$RB8B2RNnQ/KTnCWa0NAYtkqURLHIBWYnU6KY2KycW+c=','2022-05-16 08:22:39.780050',0,'student1','','','',1,1,'2022-05-16 08:21:30.000000');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,13 +224,14 @@ DROP TABLE IF EXISTS `courses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `courses` (
-  `course_id` varchar(10) NOT NULL,
+  `course_id` int(255) NOT NULL AUTO_INCREMENT,
   `course_name` varchar(100) NOT NULL,
-  `course_department` int(2) NOT NULL,
+  `course_abbr` varchar(20) DEFAULT NULL,
+  `course_department_id` int(200) NOT NULL,
   `course_credit` int(2) NOT NULL,
   PRIMARY KEY (`course_id`),
   UNIQUE KEY `course_name` (`course_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,6 +240,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
+INSERT INTO `courses` VALUES (1,'Bachelor in Information Technology','',1,10);
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,11 +252,11 @@ DROP TABLE IF EXISTS `department`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `department` (
-  `dept_id` int(11) NOT NULL,
+  `dept_id` int(255) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`dept_id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,6 +265,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
+INSERT INTO `department` VALUES (1,'Information Technology');
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +290,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,7 +299,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2022-05-15 23:36:27.675000','1','Students',1,'[{\"added\": {}}]',3,1),(2,'2022-05-15 23:39:12.519000','2','teacher1',1,'[{\"added\": {}}]',4,1),(3,'2022-05-15 23:45:20.319000','2','teacher1',2,'[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\"]}}]',4,1),(4,'2022-05-16 00:50:39.977000','2','teacher1',2,'[{\"changed\": {\"fields\": [\"Staff status\"]}}]',4,1),(5,'2022-05-16 03:46:27.457170','2','Teachers',1,'[{\"added\": {}}]',3,1),(6,'2022-05-16 03:46:47.104192','2','teacher1',2,'[{\"changed\": {\"fields\": [\"Groups\"]}}]',4,1),(7,'2022-05-16 08:20:26.584151','1','Students',2,'[{\"changed\": {\"fields\": [\"Permissions\"]}}]',3,1),(8,'2022-05-16 08:21:31.312034','3','student1',1,'[{\"added\": {}}]',4,1),(9,'2022-05-16 08:22:20.589328','3','student1',2,'[{\"changed\": {\"fields\": [\"Staff status\", \"Groups\"]}}]',4,1);
+INSERT INTO `django_admin_log` VALUES (1,'2022-05-15 23:36:27.675000','1','Students',1,'[{\"added\": {}}]',3,1),(2,'2022-05-15 23:39:12.519000','2','teacher1',1,'[{\"added\": {}}]',4,1),(3,'2022-05-15 23:45:20.319000','2','teacher1',2,'[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\"]}}]',4,1),(4,'2022-05-16 00:50:39.977000','2','teacher1',2,'[{\"changed\": {\"fields\": [\"Staff status\"]}}]',4,1),(5,'2022-05-16 03:46:27.457170','2','Teachers',1,'[{\"added\": {}}]',3,1),(6,'2022-05-16 03:46:47.104192','2','teacher1',2,'[{\"changed\": {\"fields\": [\"Groups\"]}}]',4,1),(7,'2022-05-16 08:20:26.584151','1','Students',2,'[{\"changed\": {\"fields\": [\"Permissions\"]}}]',3,1),(8,'2022-05-16 08:21:31.312034','3','student1',1,'[{\"added\": {}}]',4,1),(9,'2022-05-16 08:22:20.589328','3','student1',2,'[{\"changed\": {\"fields\": [\"Staff status\", \"Groups\"]}}]',4,1),(10,'2022-05-17 01:20:24.764349','1','Information Technology',1,'[{\"added\": {}}]',15,1),(11,'2022-05-17 01:21:34.741795','1','Course object (1)',1,'[{\"added\": {}}]',27,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -374,7 +377,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('92hyejj5pyr9tg6dtq80zwgw554hn512','.eJxVjEEOwiAQRe_C2pABOlpcuu8ZyAAzUjU0Ke3KeHfbpAvdvvf-f6tA61LC2ngOY1ZXZdTpl0VKT667yA-q90mnqS7zGPWe6MM2PUyZX7ej_Tso1Mq2FjEWDZIFb7K4KAzJojjK_iwx9tyJsNsoAThIHRL4HH0PckFEA-rzBQDHOE0:1nqDeh:5A-FO4NV3EtyvWtiCxz7Dvh_NTe62ZsgRTf_pmz6Dmo','2022-05-29 12:47:27.341000');
+INSERT INTO `django_session` VALUES ('92hyejj5pyr9tg6dtq80zwgw554hn512','.eJxVjEEOwiAQRe_C2pABOlpcuu8ZyAAzUjU0Ke3KeHfbpAvdvvf-f6tA61LC2ngOY1ZXZdTpl0VKT667yA-q90mnqS7zGPWe6MM2PUyZX7ej_Tso1Mq2FjEWDZIFb7K4KAzJojjK_iwx9tyJsNsoAThIHRL4HH0PckFEA-rzBQDHOE0:1nqDeh:5A-FO4NV3EtyvWtiCxz7Dvh_NTe62ZsgRTf_pmz6Dmo','2022-05-29 12:47:27.341000'),('l90p86m12fn41bt9y1pig4ka0jkis6vy','.eJxVjEEOwiAQRe_C2pABOlpcuu8ZyAAzUjU0Ke3KeHfbpAvdvvf-f6tA61LC2ngOY1ZXZdTpl0VKT667yA-q90mnqS7zGPWe6MM2PUyZX7ej_Tso1Mq2FjEWDZIFb7K4KAzJojjK_iwx9tyJsNsoAThIHRL4HH0PckFEA-rzBQDHOE0:1nqlsi:AtSMMQKnLHDn_TgnCrVNO5SBUakiOV1wDhLDO-118i0','2022-05-31 01:20:12.892858');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -522,4 +525,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-16 11:19:35
+-- Dump completed on 2022-05-17  1:28:56

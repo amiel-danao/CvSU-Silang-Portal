@@ -1,3 +1,11 @@
+mysql import data from sql file:
 mysql -u csvu -h csvu.mysql.pythonanywhere-services.com 'csvu$csvu_database' < backup.sql
 
-mysqldump -u yourusername -h yourusername.mysql.pythonanywhere-services.com --set-gtid-purged=OFF --no-tablespaces --column-statistics=0 'yourusername$dbname'  > db-backup.sql
+mysql export data to sql file:
+mysqldump -u yourusername -h yourusername.mysql.pythonanywhere-services.com --set-gtid-purged=OFF --no-tablespaces --column-statistics=0 'yourusername$dbname' > db-backup.sql
+
+mysql change column data type :
+ALTER TABLE courses MODIFY column course_department int(200);
+
+mysql rename column:
+ALTER TABLE courses CHANGE COLUMN course_department course_department_id int(200);

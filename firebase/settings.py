@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',    
     'baton.autodiscover',
 ]
 
@@ -89,8 +89,8 @@ if os.environ.get('DJANGO_ENV') == "LOCAL":
             'NAME': 'csvu$csvu_database',
             'USER': 'root',
             'PASSWORD': '',
-            'HOST': '127.0.0.1',                 
-            'PORT': '3306', 
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
         }
     }
 else:
@@ -153,10 +153,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 BATON = {
-    'SITE_HEADER': 'CSVU-Portal',
-    'SITE_TITLE': 'CSVU-Portal',
-    'INDEX_TITLE': 'CSVU-Portal',
-    'COPYRIGHT': 'copyright © 2022 CSVU - Portal',
+    'SITE_HEADER': 'CVSU-Portal',
+    'SITE_TITLE': 'CVSU-Portal',
+    'INDEX_TITLE': 'CVSU-Portal',
+    'COPYRIGHT': 'copyright © 2022 CVSU - Portal',
     'SUPPORT_HREF': '',
     'POWERED_BY': '',
     'CONFIRM_UNSAVED_CHANGES': True,
@@ -174,36 +174,60 @@ BATON = {
         'label': 'Search contents...',
         'url': '/search/',
     },
-    'MENU': (
+    'MENU': 
+    (
         { 'type': 'title', 'label': 'main', 'apps': ('auth', 'fireapp') },
+        
         {
-            'type': 'app',
-            'name': 'auth',
-            'label': 'Authentication',
-            'icon': 'fa fa-lock',
-            'models': (
-                {
-                    'name': 'user',
-                    'label': 'Users'
-                },
-                {
-                    'name': 'group',
-                    'label': 'Groups'
-                }
-            )
-        },
+        	'type': 'free',
+        	'label': 'Authentication',
+        	'icon': 'fa fa-lock',
+        	'children': 
+        	[
+        		{                    
+        			'name': 'user',
+        			'label': 'Users',
+        			'type': 'model',
+        			'app':'auth'
+        		},
+        		{
+        			'name': 'group',
+        			'label': 'Groups',
+        			'type': 'model',
+        			'app':'auth'
+        		},
+        		{
+        			'name': 'student',
+        			'label': 'Students',
+        			'type': 'model',
+        			'app':'fireapp'
+        		}
+        	]
+        }
+        ,
         {
-            'type': 'app',
-            'name': 'fireapp',
-            'label': 'Manage',
-            'icon': 'fa fa-tasks',
-            'models': (
-                {
-                    'name': 'course',
-                    'label': 'Courses'
-                },
-            )
-        },
+        	'type': 'free',
+        	'label': 'Curriculum',
+        	'icon': 'fa fa-tasks',
+        	'children': 
+        	[
+        		{
+        			'name': 'department',
+        			'label': 'Departments',
+        			'type': 'model',
+        			'app':'fireapp'
+        		},
+        		{
+        			'name': 'course',
+        			'label': 'Courses',
+        			'type': 'model',
+        			'app':'fireapp'
+        		}
+        	]
+        }
+
+        
+        
         #{ 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
         #{ 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
         #{ 'type': 'free', 'label': 'Custom Link', 'url': 'http://www.google.it', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
