@@ -94,3 +94,20 @@ class Teacher(models.Model):
     class Meta:
         managed = False
         db_table = 'teachers'
+
+class Subject(models.Model):
+    subject_name = models.CharField(max_length=50)
+    unit = models.IntegerField()
+    department_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'subject'
+
+
+class Section(models.Model):
+    section_name = models.CharField(unique=True, max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'section'

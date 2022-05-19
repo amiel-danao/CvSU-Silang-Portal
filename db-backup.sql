@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.0.25, for Linux (x86_64)
+-- MariaDB dump 10.19  Distrib 10.4.24-MariaDB, for Win64 (AMD64)
 --
--- Host: csvu.mysql.pythonanywhere-services.com    Database: csvu$csvu_database
+-- Host: 127.0.0.1    Database: csvu$csvu_database
 -- ------------------------------------------------------
--- Server version	5.7.34-log
+-- Server version	10.4.24-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `attendance_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `attendance_data` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `scholar_no` varchar(15) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `attendance_data` (
   `classes_attended` int(5) NOT NULL,
   `classes_total` int(5) NOT NULL,
   `percentage` float NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -49,7 +49,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(150) NOT NULL,
@@ -74,7 +74,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_group_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_group_permissions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
@@ -103,7 +103,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -131,7 +131,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `password` varchar(128) NOT NULL,
@@ -155,7 +155,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$320000$R4PD0Q3ngCEGwZrvEtlbsv$5i7XhtjjmljUUpNTBCyUHwA0YPYsoHKEuWMXLpMB3CA=','2022-05-17 01:20:12.884439',1,'admin','','','admin@email.com',1,1,'2022-05-15 10:38:00.416000'),(2,'pbkdf2_sha256$320000$sKfuRFsBgJjx6z3JNz8n8E$E4YjN81PBPh7+Qr4/zdVKR0kjVCXNoY2Ebuy/9o7FiI=','2022-05-16 01:17:19.000000',0,'teacher1','teacher1_first_name','teacher1_last_name','teacher1@email.com',1,1,'2022-05-15 23:39:12.000000'),(3,'pbkdf2_sha256$320000$jBuRa74zMbcWQuVqfz56VY$RB8B2RNnQ/KTnCWa0NAYtkqURLHIBWYnU6KY2KycW+c=','2022-05-16 08:22:39.780050',0,'student1','','','',1,1,'2022-05-16 08:21:30.000000');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$320000$R4PD0Q3ngCEGwZrvEtlbsv$5i7XhtjjmljUUpNTBCyUHwA0YPYsoHKEuWMXLpMB3CA=','2022-05-16 12:42:30.032630',1,'admin','','','admin@email.com',1,1,'2022-05-15 10:38:00.416000'),(2,'pbkdf2_sha256$320000$sKfuRFsBgJjx6z3JNz8n8E$E4YjN81PBPh7+Qr4/zdVKR0kjVCXNoY2Ebuy/9o7FiI=','2022-05-16 01:17:19.000000',0,'teacher1','teacher1_first_name','teacher1_last_name','teacher1@email.com',1,1,'2022-05-15 23:39:12.000000'),(3,'pbkdf2_sha256$320000$jBuRa74zMbcWQuVqfz56VY$RB8B2RNnQ/KTnCWa0NAYtkqURLHIBWYnU6KY2KycW+c=','2022-05-16 08:22:39.780050',0,'student1','','','',1,1,'2022-05-16 08:21:30.000000');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,7 +165,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_user_groups` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -194,7 +194,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user_user_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_user_user_permissions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -222,13 +222,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `courses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `courses` (
-  `course_id` int(255) NOT NULL AUTO_INCREMENT,
+  `course_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `course_name` varchar(100) NOT NULL,
-  `course_abbr` varchar(20) DEFAULT NULL,
-  `course_department_id` int(200) NOT NULL,
+  `course_department_id` int(2) NOT NULL,
   `course_credit` int(2) NOT NULL,
+  `course_abbr` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`course_id`),
   UNIQUE KEY `course_name` (`course_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
@@ -240,7 +240,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (1,'Bachelor in Information Technology','',1,10);
+INSERT INTO `courses` VALUES (1,'Bachelor In Information Technology',1,10,'BSIT');
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,13 +250,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `department`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `department` (
-  `dept_id` int(255) NOT NULL AUTO_INCREMENT,
+  `dept_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`dept_id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -265,7 +265,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'Information Technology');
+INSERT INTO `department` VALUES (2,'HRM'),(1,'Information Technology');
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -275,11 +275,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_admin_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_admin_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `action_time` datetime(6) NOT NULL,
-  `object_id` longtext,
+  `object_id` longtext DEFAULT NULL,
   `object_repr` varchar(200) NOT NULL,
   `action_flag` smallint(5) unsigned NOT NULL,
   `change_message` longtext NOT NULL,
@@ -290,7 +290,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -299,7 +299,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2022-05-15 23:36:27.675000','1','Students',1,'[{\"added\": {}}]',3,1),(2,'2022-05-15 23:39:12.519000','2','teacher1',1,'[{\"added\": {}}]',4,1),(3,'2022-05-15 23:45:20.319000','2','teacher1',2,'[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\"]}}]',4,1),(4,'2022-05-16 00:50:39.977000','2','teacher1',2,'[{\"changed\": {\"fields\": [\"Staff status\"]}}]',4,1),(5,'2022-05-16 03:46:27.457170','2','Teachers',1,'[{\"added\": {}}]',3,1),(6,'2022-05-16 03:46:47.104192','2','teacher1',2,'[{\"changed\": {\"fields\": [\"Groups\"]}}]',4,1),(7,'2022-05-16 08:20:26.584151','1','Students',2,'[{\"changed\": {\"fields\": [\"Permissions\"]}}]',3,1),(8,'2022-05-16 08:21:31.312034','3','student1',1,'[{\"added\": {}}]',4,1),(9,'2022-05-16 08:22:20.589328','3','student1',2,'[{\"changed\": {\"fields\": [\"Staff status\", \"Groups\"]}}]',4,1),(10,'2022-05-17 01:20:24.764349','1','Information Technology',1,'[{\"added\": {}}]',15,1),(11,'2022-05-17 01:21:34.741795','1','Course object (1)',1,'[{\"added\": {}}]',27,1);
+INSERT INTO `django_admin_log` VALUES (1,'2022-05-15 23:36:27.675000','1','Students',1,'[{\"added\": {}}]',3,1),(2,'2022-05-15 23:39:12.519000','2','teacher1',1,'[{\"added\": {}}]',4,1),(3,'2022-05-15 23:45:20.319000','2','teacher1',2,'[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\"]}}]',4,1),(4,'2022-05-16 00:50:39.977000','2','teacher1',2,'[{\"changed\": {\"fields\": [\"Staff status\"]}}]',4,1),(5,'2022-05-16 03:46:27.457170','2','Teachers',1,'[{\"added\": {}}]',3,1),(6,'2022-05-16 03:46:47.104192','2','teacher1',2,'[{\"changed\": {\"fields\": [\"Groups\"]}}]',4,1),(7,'2022-05-16 08:20:26.584151','1','Students',2,'[{\"changed\": {\"fields\": [\"Permissions\"]}}]',3,1),(8,'2022-05-16 08:21:31.312034','3','student1',1,'[{\"added\": {}}]',4,1),(9,'2022-05-16 08:22:20.589328','3','student1',2,'[{\"changed\": {\"fields\": [\"Staff status\", \"Groups\"]}}]',4,1),(10,'2022-05-16 13:04:40.556617','0','Department object (0)',1,'[{\"added\": {}}]',15,1),(11,'2022-05-16 13:31:38.510631','2','HRM',1,'[{\"added\": {}}]',15,1),(12,'2022-05-16 13:32:21.090634','1','Information Technology',2,'[{\"changed\": {\"fields\": [\"Name\"]}}]',15,1),(13,'2022-05-16 13:41:28.245630','0','Course object (0)',1,'[{\"added\": {}}]',27,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -309,7 +309,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_content_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_content_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_label` varchar(100) NOT NULL,
@@ -335,7 +335,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_migrations` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `app` varchar(255) NOT NULL,
@@ -361,7 +361,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_session` (
   `session_key` varchar(40) NOT NULL,
   `session_data` longtext NOT NULL,
@@ -377,7 +377,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('92hyejj5pyr9tg6dtq80zwgw554hn512','.eJxVjEEOwiAQRe_C2pABOlpcuu8ZyAAzUjU0Ke3KeHfbpAvdvvf-f6tA61LC2ngOY1ZXZdTpl0VKT667yA-q90mnqS7zGPWe6MM2PUyZX7ej_Tso1Mq2FjEWDZIFb7K4KAzJojjK_iwx9tyJsNsoAThIHRL4HH0PckFEA-rzBQDHOE0:1nqDeh:5A-FO4NV3EtyvWtiCxz7Dvh_NTe62ZsgRTf_pmz6Dmo','2022-05-29 12:47:27.341000'),('l90p86m12fn41bt9y1pig4ka0jkis6vy','.eJxVjEEOwiAQRe_C2pABOlpcuu8ZyAAzUjU0Ke3KeHfbpAvdvvf-f6tA61LC2ngOY1ZXZdTpl0VKT667yA-q90mnqS7zGPWe6MM2PUyZX7ej_Tso1Mq2FjEWDZIFb7K4KAzJojjK_iwx9tyJsNsoAThIHRL4HH0PckFEA-rzBQDHOE0:1nqlsi:AtSMMQKnLHDn_TgnCrVNO5SBUakiOV1wDhLDO-118i0','2022-05-31 01:20:12.892858');
+INSERT INTO `django_session` VALUES ('92hyejj5pyr9tg6dtq80zwgw554hn512','.eJxVjEEOwiAQRe_C2pABOlpcuu8ZyAAzUjU0Ke3KeHfbpAvdvvf-f6tA61LC2ngOY1ZXZdTpl0VKT667yA-q90mnqS7zGPWe6MM2PUyZX7ej_Tso1Mq2FjEWDZIFb7K4KAzJojjK_iwx9tyJsNsoAThIHRL4HH0PckFEA-rzBQDHOE0:1nqDeh:5A-FO4NV3EtyvWtiCxz7Dvh_NTe62ZsgRTf_pmz6Dmo','2022-05-29 12:47:27.341000'),('o07wog4ww9spvqk4sinmku47a7p7ybzj','.eJxVjEEOwiAQRe_C2pABOlpcuu8ZyAAzUjU0Ke3KeHfbpAvdvvf-f6tA61LC2ngOY1ZXZdTpl0VKT667yA-q90mnqS7zGPWe6MM2PUyZX7ej_Tso1Mq2FjEWDZIFb7K4KAzJojjK_iwx9tyJsNsoAThIHRL4HH0PckFEA-rzBQDHOE0:1nqa3S:aRbycuYKAufpt421jRcQmwI4mB7DBslpBZXyuJyHfjA','2022-05-30 12:42:30.112627');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -387,14 +387,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `grading_scale`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `grading_scale` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `teacher_id` int(10) NOT NULL,
   `course_code` varchar(10) NOT NULL,
   `course_dep` int(11) NOT NULL,
   `gradescale` varchar(100) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -409,19 +409,43 @@ LOCK TABLES `grading_scale` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `section`
+--
+
+DROP TABLE IF EXISTS `section`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `section` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `section_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `section_name` (`section_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `section`
+--
+
+LOCK TABLES `section` WRITE;
+/*!40000 ALTER TABLE `section` DISABLE KEYS */;
+/*!40000 ALTER TABLE `section` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `semester_session`
 --
 
 DROP TABLE IF EXISTS `semester_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `semester_session` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `session` int(11) NOT NULL,
   `type` varchar(10) NOT NULL,
-  `result_published` int(2) NOT NULL DEFAULT '0',
-  `student_registration` int(2) NOT NULL DEFAULT '0' COMMENT '0 means resgistration is not goign and 1 means registration going on',
-  `starting_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `result_published` int(2) NOT NULL DEFAULT 0,
+  `student_registration` int(2) NOT NULL DEFAULT 0 COMMENT '0 means resgistration is not goign and 1 means registration going on',
+  `starting_timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -442,7 +466,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `students_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `students_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
@@ -455,7 +479,7 @@ CREATE TABLE `students_info` (
   `semester` int(2) NOT NULL,
   `session` varchar(20) NOT NULL,
   `mobile` bigint(20) NOT NULL,
-  `mobile_verified` int(2) NOT NULL DEFAULT '0',
+  `mobile_verified` int(2) NOT NULL DEFAULT 0,
   `parents_mobile` bigint(20) NOT NULL,
   `courses` varchar(100) NOT NULL,
   `courses_load` varchar(100) DEFAULT NULL,
@@ -465,13 +489,13 @@ CREATE TABLE `students_info` (
   `cpi` float DEFAULT NULL,
   `home_address` text NOT NULL,
   `hostel_address` text NOT NULL,
-  `payment_verified` int(2) DEFAULT '1',
+  `payment_verified` int(2) DEFAULT 1,
   `blocked` int(2) NOT NULL,
   `approved` int(2) NOT NULL,
   `biography` text NOT NULL,
-  `published` int(2) NOT NULL DEFAULT '0',
+  `published` int(2) NOT NULL DEFAULT 0,
   `cv_link` varchar(255) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -486,12 +510,37 @@ LOCK TABLES `students_info` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `subject`
+--
+
+DROP TABLE IF EXISTS `subject`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `subject` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subject_name` varchar(50) NOT NULL,
+  `unit` int(10) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `subject`
+--
+
+LOCK TABLES `subject` WRITE;
+/*!40000 ALTER TABLE `subject` DISABLE KEYS */;
+/*!40000 ALTER TABLE `subject` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `teachers`
 --
 
 DROP TABLE IF EXISTS `teachers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `teachers` (
   `teacher_id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -499,8 +548,8 @@ CREATE TABLE `teachers` (
   `privilege` varchar(15) NOT NULL,
   `dept_id` int(2) DEFAULT NULL,
   `mobile` bigint(20) NOT NULL,
-  `blocked` int(1) NOT NULL DEFAULT '0',
-  `approved` int(2) NOT NULL DEFAULT '0',
+  `blocked` int(1) NOT NULL DEFAULT 0,
+  `approved` int(2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`teacher_id`),
   UNIQUE KEY `mobile` (`mobile`),
   UNIQUE KEY `email` (`email`)
@@ -525,4 +574,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-17  1:28:56
+-- Dump completed on 2022-05-19 18:38:16
