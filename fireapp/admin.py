@@ -16,8 +16,9 @@ class CourseAdmin(admin.ModelAdmin):
         return obj.course_department.name
     
     def save_related(self, request, form, formsets, change):
-        super().save_related(request, form, formsets, change)
-        form.instance.subjects.add(request.subjects) 
+        form.save_m2m()
+        for formset in formsets:
+            self.save_formset(request, form, formset, change=change)
 
 
 app_config = apps.get_app_config('fireapp') # Replace your_app_name it is just a placeholder
