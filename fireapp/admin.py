@@ -13,6 +13,15 @@ class CourseAdmin(admin.ModelAdmin):
     def get_department_name(self, obj):
         return obj.course_department.name
 
+class SubjectAdmin(admin.ModelAdmin):
+    model = Subject
+    list_display = ('id', 'subject_name', 'get_courses_name', 'unit')
+    list_editable = ['unit']
+
+    @admin.display(description='Courses', ordering='courses__name')
+    def get_courses_name(self, obj):
+        return ' ,'.join(obj.courses)
+
 admin.site.register(Course, CourseAdmin)
 
 app_config = apps.get_app_config('fireapp') # Replace your_app_name it is just a placeholder

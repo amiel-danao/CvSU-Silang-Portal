@@ -10,5 +10,8 @@ ALTER TABLE courses MODIFY column course_department int(200);
 mysql rename column:
 ALTER TABLE courses CHANGE COLUMN course_department course_department_id int(200);
 
-generate models
-python manage.py inspectdb table1 > models.py
+generate requirements.txt
+pip3 freeze > requirements.txt
+
+create python virtual environment
+mkvirtualenv myvirtualenv --python=/usr/bin/python3.9

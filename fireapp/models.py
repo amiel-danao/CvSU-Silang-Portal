@@ -98,11 +98,13 @@ class Teacher(models.Model):
 class Subject(models.Model):
     subject_name = models.CharField(max_length=50)
     unit = models.IntegerField()
-    department_id = models.IntegerField()
+    courses = models.ManyToManyField(Course)
 
     class Meta:
         managed = False
         db_table = 'subject'
+    def __str__(self):
+        return self.subject_name
 
 
 class Section(models.Model):
