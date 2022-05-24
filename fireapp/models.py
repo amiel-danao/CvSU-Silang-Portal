@@ -1,11 +1,8 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+
+STUDENT = 1
+TEACHER = 2
+ADMIN = 3
 
 class AttendanceData(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -73,6 +70,13 @@ class GradingScale(models.Model):
         managed = False
         db_table = 'grading_scale'
 
+class Section(models.Model):
+    id = models.BigAutoField(db_column='id', primary_key=True)
+    section_name = models.CharField(unique=True, max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'section'
 
 class Student(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -81,6 +85,10 @@ class Student(models.Model):
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=6)
     department = models.IntegerField()
+    section = models.ForeignKey(
+        Section,
+        on_delete=models.CASCADE
+    )
     semester = models.IntegerField()
     mobile = models.BigIntegerField()
     parents_mobile = models.BigIntegerField()
@@ -102,14 +110,34 @@ class Teacher(models.Model):
     mobile = models.BigIntegerField(unique=True)
     blocked = models.IntegerField()
     approved = models.IntegerField()
+    sections = models.ManyToManyField(Section)
 
     class Meta:
         managed = False
         db_table = 'teachers'
 
-class Section(models.Model):
-    section_name = models.CharField(unique=True, max_length=100)
+@python_2_unicode_compatible
+class Profile(models.Model):    
+    ROLE_CHOICES = (
+        (STUDENT, 'Student'),
+        (TEACHER, 'Teacher'),
+        (ADMIN, 'Admin'),
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    location = models.CharField(max_length=30, blank=True)
+    birthdate = models.DateField(null=True, blank=True)
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
 
     class Meta:
-        managed = False
-        db_table = 'section'
+        verbose_name = 'profile'
+        verbose_name_plural = 'profiles'
+
+    def __str__(self):
+        return self.user.username
+
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
