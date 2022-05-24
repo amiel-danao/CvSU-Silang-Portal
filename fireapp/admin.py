@@ -19,6 +19,8 @@ class CourseAdmin(admin.ModelAdmin):
         obj = form.instance
         # make changes to model instance
         #form.instance.subjects.add(form.subjects)      
+        print(request)
+        print(form)
         obj.save()
         super().save_related(request, form, formsets, change)   
 
