@@ -234,3 +234,5 @@ BATON = {
         #] }
     )
 }
+
+AUTH_USER_MODEL="fireapp.CustomUser"

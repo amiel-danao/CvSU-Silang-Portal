@@ -1,8 +1,62 @@
+import django
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
-STUDENT = 1
-TEACHER = 2
-ADMIN = 3
+GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+
+class CustomUser(AbstractUser):
+    user_type_data=((1,"Admin"),(2,"Teacher"),(3,"Student"))
+    user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
+
+class Teacher(models.Model):
+    id=models.AutoField(primary_key=True)
+    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
+    objects=models.Manager()
+
+class Section(models.Model):
+    id = models.BigAutoField(db_column='id', primary_key=True, default=1)
+    section_name = models.CharField(unique=True, max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'section'
+
+
+class Student(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
+    email = models.CharField(unique=True, blank=True, max_length=100)
+    scholar_no = models.CharField(unique=True, max_length=15)
+    first_name = models.CharField(default="", blank=False, max_length=50)
+    middle_name = models.CharField(blank=True, max_length=50)
+    last_name = models.CharField(default="", blank=False, max_length=50)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    birth_date = models.DateField(default=django.utils.timezone.now)
+    section = models.ForeignKey(
+        Section,
+        on_delete=models.CASCADE,
+        default=1
+    )
+    
+    mobile = models.PositiveBigIntegerField(default=0, blank=True)
+    parents_mobile = models.PositiveBigIntegerField(default=0, blank=True)
+    home_address = models.TextField(blank=True)    
+
+    class Meta:
+        db_table = 'student'
+
+class Courses(models.Model):
+    id=models.AutoField(primary_key=True)
+    course_name=models.CharField(max_length=255)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now_add=True)
+    objects=models.Manager()
 
 class AttendanceData(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -70,74 +124,25 @@ class GradingScale(models.Model):
         managed = False
         db_table = 'grading_scale'
 
-class Section(models.Model):
-    id = models.BigAutoField(db_column='id', primary_key=True)
-    section_name = models.CharField(unique=True, max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'section'
-
-class Student(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    email = models.CharField(max_length=100)
-    scholar_no = models.CharField(unique=True, max_length=15)
-    name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=6)
-    department = models.IntegerField()
-    section = models.ForeignKey(
-        Section,
-        on_delete=models.CASCADE
-    )
-    semester = models.IntegerField()
-    mobile = models.BigIntegerField()
-    parents_mobile = models.BigIntegerField()
-    courses = models.CharField(max_length=100)
-    home_address = models.TextField()
-    timestamp = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'students_info'
 
 
-class Teacher(models.Model):
-    id = models.BigAutoField(db_column='teacher_id', primary_key=True)
-    name = models.CharField(max_length=255)
-    email = models.CharField(unique=True, max_length=255, blank=True, null=True)
-    privilege = models.CharField(max_length=15)
-    dept_id = models.IntegerField(blank=True, null=True)
-    mobile = models.BigIntegerField(unique=True)
-    blocked = models.IntegerField()
-    approved = models.IntegerField()
-    sections = models.ManyToManyField(Section)
-
-    class Meta:
-        managed = False
-        db_table = 'teachers'
-
-@python_2_unicode_compatible
-class Profile(models.Model):    
-    ROLE_CHOICES = (
-        (STUDENT, 'Student'),
-        (TEACHER, 'Teacher'),
-        (ADMIN, 'Admin'),
-    )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    location = models.CharField(max_length=30, blank=True)
-    birthdate = models.DateField(null=True, blank=True)
-    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
-
-    class Meta:
-        verbose_name = 'profile'
-        verbose_name_plural = 'profiles'
-
-    def __str__(self):
-        return self.user.username
 
 
-@receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
+@receiver(post_save,sender=CustomUser)
+def create_user_profile(sender,instance,created,**kwargs):
     if created:
-        Profile.objects.create(user=instance)
-    instance.profile.save()
+        if instance.user_type==1:
+            User.objects.create(admin=instance)
+        if instance.user_type==2:
+            Teacher.objects.create(admin=instance)
+        if instance.user_type==3:
+            Student.objects.create(admin=instance)
+
+@receiver(post_save,sender=CustomUser)
+def save_user_profile(sender,instance,**kwargs):
+    if instance.user_type==1:
+        instance.user.save()
+    if instance.user_type==2:
+        instance.teacher.save()
+    if instance.user_type==3:
+        instance.students.save()

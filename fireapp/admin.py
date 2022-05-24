@@ -1,8 +1,8 @@
 from django.contrib import admin
-
-# Register your models here.
+from django.contrib.auth.admin import UserAdmin
 from django.apps import apps
-from fireapp.models import Course, Subject, Profile
+from fireapp.models import Course, Subject, Student
+from django.contrib.auth.models import User
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -22,18 +22,35 @@ class CourseAdmin(admin.ModelAdmin):
         print(request)
         print(form)
         obj.save()
-        super().save_related(request, form, formsets, change)   
+        super().save_related(request, form, formsets, change)
 
+class CustomStudentAdmin(admin.ModelAdmin):
+    model = Student
+    exclude = ('user',)
+
+#admin.site.unregister(User)
+admin.site.register(Student, CustomStudentAdmin)
+"""
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
     verbose_name_plural = 'Profile'
     fk_name = 'user'
 
+    
+    def get_fields(self, request, obj=None):
+        fields = super(CustomUserAdmin, self).get_fields(request, obj)
+        if not request.user.is_superuser:
+            fields -= ('is_superuser',)
+
+        return fields
+    
+
+
 
 class CustomUserAdmin(UserAdmin):
     inlines = (ProfileInline, )
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'get_location')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'get_location')
     list_select_related = ('profile', )
 
     def get_location(self, instance):
@@ -45,10 +62,20 @@ class CustomUserAdmin(UserAdmin):
             return list()
         return super(CustomUserAdmin, self).get_inline_instances(request, obj)
 
+    #def get_exclude(self, request, obj=None):
+    #    excluded = super().get_exclude(request, obj) or [] # get overall excluded fields
 
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
+    #    if not request.user.is_superuser: # if user is not a superuser
+    #        return ['is_superuser']#['password', 'groups', 'date_joined', 'user_permissions', 'is_superuser']
 
+    #    return excluded # otherwise return the default excluded fields if any
+
+    
+
+    
+
+
+"""
 
 
 app_config = apps.get_app_config('fireapp') # Replace your_app_name it is just a placeholder
