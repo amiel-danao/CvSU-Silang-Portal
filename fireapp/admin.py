@@ -16,7 +16,7 @@ class CourseAdmin(admin.ModelAdmin):
         return obj.course_department.name
     
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
-        if db_field.name == "subjects":
+        if db_field.name == "subject_id":
             qs = kwargs.get("queryset", db_field.remote_field.model.objects)
             # Avoid a major performance hit resolving permission names which
             # triggers a content_type load:
