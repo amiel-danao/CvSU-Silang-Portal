@@ -15,16 +15,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 admin.site.register(Course, CourseAdmin)
 
-class SubjectAdmin(admin.ModelAdmin):
-    model = Subject
-    list_display = ('id', 'subject_name', 'get_courses_name', 'unit')
-    list_editable = ['unit']
 
-    @admin.display(description='Courses', ordering='courses__name')
-    def get_courses_name(self, obj):
-        return ' ,'.join([course.course_name for course in obj.courses])
-
-admin.site.register(Subject, SubjectAdmin)
 
 app_config = apps.get_app_config('fireapp') # Replace your_app_name it is just a placeholder
 models = app_config.get_models()

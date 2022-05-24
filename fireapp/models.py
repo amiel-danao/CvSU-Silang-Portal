@@ -31,6 +31,16 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
+class Subject(models.Model):
+    subject_name = models.CharField(max_length=50)
+    unit = models.IntegerField()    
+
+    class Meta:
+        managed = False
+        db_table = 'subject'
+    def __str__(self):
+        return self.subject_name
+
 class Course(models.Model):
     id = models.BigAutoField(db_column='course_id', primary_key=True)
     course_name = models.CharField(unique=True, max_length=100)
@@ -41,6 +51,8 @@ class Course(models.Model):
         db_column='course_department_id'
     )
     course_credit = models.PositiveSmallIntegerField()
+
+    subjects = models.ManyToManyField(Subject)
 
     class Meta:
         managed = False
@@ -94,18 +106,6 @@ class Teacher(models.Model):
     class Meta:
         managed = False
         db_table = 'teachers'
-
-class Subject(models.Model):
-    subject_name = models.CharField(max_length=50)
-    unit = models.IntegerField()
-    courses = models.ManyToManyField(Course)
-
-    class Meta:
-        managed = False
-        db_table = 'subject'
-    def __str__(self):
-        return self.subject_name
-
 
 class Section(models.Model):
     section_name = models.CharField(unique=True, max_length=100)
