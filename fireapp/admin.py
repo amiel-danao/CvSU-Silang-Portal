@@ -22,7 +22,7 @@ class SubjectAdmin(admin.ModelAdmin):
 
     @admin.display(description='Courses', ordering='courses__name')
     def get_courses_name(self, obj):
-        return ' ,'.join(obj.courses)
+        return ' ,'.join([course.course_name for course in obj.courses])
 
 admin.site.register(Subject, SubjectAdmin)
 
