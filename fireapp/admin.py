@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.apps import apps
-from fireapp.models import Course
+from fireapp.models import Course, Subject
 
 class CourseAdmin(admin.ModelAdmin):
     model = Course
