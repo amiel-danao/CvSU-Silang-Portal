@@ -14,11 +14,13 @@ class CourseAdmin(admin.ModelAdmin):
     @admin.display(description='Department Name', ordering='department__name')
     def get_department_name(self, obj):
         return obj.course_department.name
-    
+            
     def save_related(self, request, form, formsets, change):
-        form.save_m2m()
-        for formset in formsets:
-            self.save_formset(request, form, formset, change=change)
+        obj = form.instance
+        # make changes to model instance
+        #form.instance.subjects.add(form.subjects)      
+        obj.save()
+        super().save_related(request, form, formsets, change)   
 
 
 app_config = apps.get_app_config('fireapp') # Replace your_app_name it is just a placeholder
