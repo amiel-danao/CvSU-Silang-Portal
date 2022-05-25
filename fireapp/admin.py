@@ -85,8 +85,7 @@ class CustomStudentAdmin(admin.ModelAdmin):
     filter_horizontal = ('groups', 'user_permissions',)
     inlines = []
     exclude = ('is_superuser', 'last_login', 'date_joined')
-    fieldsets = (
-        ('User Information', {'fields': ('email', 'password', 'user_type')}),
+    fieldsets = (        
         ('Personal Information', {'fields': ('first_name', 'last_name', 'middle_name', 'birth_date', 'gender')}),
         ('Permissions', {'fields': ('is_active', 'groups', 'user_permissions')}),
     )
@@ -98,6 +97,11 @@ class CustomStudentAdmin(admin.ModelAdmin):
             kwargs.update({
                 'exclude': getattr(kwargs, 'exclude', tuple()) + ('email', 'is_staff', 'password', 'user_type') + CustomStudentAdmin.exclude,
             })
+        else:
+            kwargs.update({
+                'fieldsets' : ('User Information', {'fields': ('email', 'password', 'user_type')}) + getattr(kwargs, 'fieldsets', tuple())
+            })            
+
         return super().get_form(request, obj, **kwargs)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
