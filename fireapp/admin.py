@@ -62,6 +62,7 @@ class StudentInline(admin.TabularInline):
 # Define a new User admin
 class CustomStudentAdmin(UserAdmin):
     inlines = (StudentInline, )
+    ordering = ('email',)
 
 # Re-register UserAdmin
 admin.site.register(CustomUser, CustomStudentAdmin)
