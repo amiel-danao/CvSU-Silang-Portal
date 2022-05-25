@@ -73,7 +73,7 @@ class StudentInline(admin.TabularInline):
     model = Student
 
 @admin.register(CustomUser)
-class CustomStudentAdmin(UserAdmin):
+class CustomStudentAdmin(admin.ModelAdmin):
     inlines = [StudentInline]
     ordering = ('email',)
     list_display = ('email', 'is_active',)
