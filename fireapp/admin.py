@@ -49,7 +49,7 @@ class CustomUserAdmin(admin.StackedInline):
     ordering = ('email',)
 
 admin.site.register(CustomUser, CustomUserAdmin)
-"""
+
 
 
 class StudentInline(admin.TabularInline):
@@ -67,6 +67,16 @@ class CustomStudentAdmin(UserAdmin):
 
 # Re-register UserAdmin
 admin.site.register(CustomUser, CustomStudentAdmin)
+"""
+
+class StudentInline(admin.TabularInline):
+    model = Student
+
+@admin.register(CustomUser)
+class CustomStudentAdmin(UserAdmin):
+    inlines = [StudentInline]
+    ordering = ('email',)
+    list_display = ('email', 'is_active',)
 
 """
 StudentAdmin = lambda model: type('SubClass'+model.__name__, (admin.ModelAdmin,), {
