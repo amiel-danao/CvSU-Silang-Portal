@@ -19,7 +19,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
 
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    birth_date = models.DateField(default=django.utils.timezone.now)
+    first_name = models.CharField(default="", blank=False, max_length=50)
     middle_name = models.CharField(blank=True, max_length=50)
+    last_name = models.CharField(default="", blank=False, max_length=50)
     user_type_data=((1,"Admin"),(2,"Teacher"),(3,"Student"))
     user_type=models.CharField(default=1,choices=user_type_data,max_length=1)
 
@@ -45,10 +49,8 @@ class Section(models.Model):
 
 class Student(models.Model):
     id = models.BigAutoField(primary_key=True)
-    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
-    scholar_no = models.CharField(unique=True, max_length=15)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    birth_date = models.DateField(default=django.utils.timezone.now)
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
+    scholar_no = models.CharField(unique=True, max_length=15)    
     section = models.ForeignKey(
         Section,
         on_delete=models.CASCADE,

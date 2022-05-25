@@ -51,21 +51,12 @@ admin.site.register(CustomUser, CustomUserAdmin)
 
 class CustomStudentAdmin(CustomUserAdmin):
     model = Student
-    list_display = ('email', 'is_active',)
-    list_filter = ('email', 'is_active',)
-    filter_horizontal = ('groups', 'user_permissions',)
-    fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_active', 'groups', 'user_permissions')}),
-    )
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'is_active')}
-        ),
-    )
-    search_fields = ('email',)
-    ordering = ('email',)
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = list(super().get_fieldsets(request, obj))
+        # update the `fieldsets` with your specific fields
+        fieldsets.append(
+            ('Personal info', {'fields': ('first_name', 'last_name', 'home_address')}))
+        return fieldsets
 
 admin.site.register(Student, CustomStudentAdmin)
 
