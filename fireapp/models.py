@@ -30,10 +30,15 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+    class Meta:
+        app_label = "fireapp"
+
 class Teacher(models.Model):
     id=models.AutoField(primary_key=True)
     user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
     objects = CustomUserManager()
+    class Meta:
+        app_label = "fireapp"
 
 class Section(models.Model):
     id = models.BigAutoField(db_column='id', primary_key=True, default=1)
@@ -60,6 +65,9 @@ class Student(models.Model):
     parents_mobile = models.PositiveBigIntegerField(default=0, blank=True)
     home_address = models.TextField(blank=True)
     objects = CustomUserManager()
+    
+    class Meta:
+        app_label = "fireapp"
 
 
 class Courses(models.Model):
