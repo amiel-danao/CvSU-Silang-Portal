@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.apps import apps
-from fireapp.models import Course, Subject, Student
+from fireapp.models import Course, Subject, Student, Teacher
 from django.contrib.auth import get_user_model
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 CustomUser = get_user_model()
@@ -69,14 +69,27 @@ class CustomStudentAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomStudentAdmin)
 """
 
-class StudentInline(admin.TabularInline):
+class StudentInline(admin.StackedInline):
     model = Student
+
+class TeacherInline(admin.StackedInline):
+    model = Teacher
 
 @admin.register(CustomUser)
 class CustomStudentAdmin(admin.ModelAdmin):
-    inlines = [StudentInline]
+    
     ordering = ('email',)
     list_display = ('email', 'is_active',)
+    exclude = ('email', 'is_active', 'is_staff', 'password', 'is_superuser', 'last_login', 'date_joined', 'user_type')
+    inlines = []
+
+    def get_inlines(self, request, obj):
+        if request.user.user_type == 2:    # the date
+            return [TeacherInline]
+        if request.user.user_type == 3:    # the date
+            return [StudentInline]
+        # or else
+        return []
 
 """
 StudentAdmin = lambda model: type('SubClass'+model.__name__, (admin.ModelAdmin,), {
