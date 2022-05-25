@@ -86,9 +86,16 @@ class CustomStudentAdmin(admin.ModelAdmin):
     inlines = []
     exclude = ('is_superuser', 'last_login', 'date_joined')
 
+    def get_form(self, request, obj=None, **kwargs):
+        """Override the get_form and extend the 'exclude' keyword arg"""
+        if obj:
+            kwargs.update({
+                'exclude': getattr(kwargs, 'exclude', tuple()) + ('email', 'is_staff', 'password', 'user_type'),
+            })
+        return super(SubSectionAdmin, self).get_form(request, obj, **kwargs)
+
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = []
-        self.exclude = ('email', 'is_staff', 'password', 'user_type')
         
         if request.user.user_type == 2:    # the date
             self.inlines = [TeacherInline]
