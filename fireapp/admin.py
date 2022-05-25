@@ -57,7 +57,7 @@ class StudentInline(admin.TabularInline):
     fk_name = 'user'
     can_delete = False
     max_num = 1 
-    verbose_name_plural = _('student')
+    verbose_name_plural = ('student')
 
 # Define a new User admin
 class CustomStudentAdmin(UserAdmin):
