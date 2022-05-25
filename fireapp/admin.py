@@ -79,14 +79,14 @@ class TeacherInline(admin.StackedInline):
 
 @admin.register(CustomUser)
 class CustomStudentAdmin(admin.ModelAdmin):
-    
+    add_form = CustomUserCreationForm
     ordering = ('email',)
     list_display = ('email', 'is_active',)    
     filter_horizontal = ('groups', 'user_permissions',)
     inlines = []
     exclude = ('is_superuser', 'last_login', 'date_joined')
     fieldsets = (
-        ('Personal Information', {'fields': ('first_name', 'last_name', 'middle_name')}),
+        ('Personal Information', {'fields': ('first_name', 'last_name', 'middle_name', 'birth_date', 'gender')}),
         ('Permissions', {'fields': ('is_active', 'groups', 'user_permissions')}),
     )
 
