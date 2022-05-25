@@ -2,7 +2,7 @@ import django
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 
 from fireapp.managers import CustomUserManager
@@ -12,19 +12,23 @@ GENDER_CHOICES = (
         ('F', 'Female'),
     )
 
-class CustomUser(AbstractUser):
-    username = None
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(default=timezone.now)
+
+    middle_name = models.CharField(blank=True, max_length=50)
+    user_type_data=((1,"Admin"),(2,"Teacher"),(3,"Student"))
+    user_type=models.CharField(default=1,choices=user_type_data,max_length=1)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
 
-    user_type_data=((1,"Admin"),(2,"Teacher"),(3,"Student"))
-    user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
-
+    objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.email        
 
     class Meta:
         app_label = "fireapp"
@@ -43,9 +47,6 @@ class Student(models.Model):
     user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
     email = models.CharField(unique=True, blank=True, max_length=100)
     scholar_no = models.CharField(unique=True, max_length=15)
-    first_name = models.CharField(default="", blank=False, max_length=50)
-    middle_name = models.CharField(blank=True, max_length=50)
-    last_name = models.CharField(default="", blank=False, max_length=50)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     birth_date = models.DateField(default=django.utils.timezone.now)
     section = models.ForeignKey(
