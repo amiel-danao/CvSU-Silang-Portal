@@ -36,7 +36,7 @@ class CustomUserAdmin(UserAdmin):
     filter_horizontal = ('groups', 'user_permissions',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'groups', 'user_permissions')}),
+        ('Permissions', {'fields': ('is_active', 'groups', 'user_permissions')}),
     )
     add_fieldsets = (
         (None, {
@@ -49,14 +49,14 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
-class CustomStudentAdmin(UserAdmin):
+class CustomStudentAdmin(CustomUserAdmin):
     model = Student
     list_display = ('email', 'is_active',)
     list_filter = ('email', 'is_active',)
     filter_horizontal = ('groups', 'user_permissions',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'groups', 'user_permissions')}),
+        ('Permissions', {'fields': ('is_active', 'groups', 'user_permissions')}),
     )
     add_fieldsets = (
         (None, {
