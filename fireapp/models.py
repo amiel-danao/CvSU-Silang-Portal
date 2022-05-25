@@ -8,10 +8,19 @@ from django.utils import timezone
 
 from fireapp.managers import CustomUserManager
 
+
 GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
     )
+
+CONST_TYPE_ADMIN = 1
+CONST_TYPE_TEACHER = 2
+CONST_TYPE_STUDENT = 3
+ADMIN_TYPE = ((CONST_TYPE_ADMIN,"Admin"),)
+USER_TYPE =(
+    (CONST_TYPE_TEACHER,"Teacher"),
+    (CONST_TYPE_STUDENT,"Student"))
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
@@ -25,8 +34,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(default="", blank=False, max_length=50)
     middle_name = models.CharField(blank=True, max_length=50)
     last_name = models.CharField(default="", blank=False, max_length=50)
-    user_type_data=((1,"Admin"),(2,"Teacher"),(3,"Student"))
-    user_type=models.CharField(default=1,choices=user_type_data,max_length=1)
+    
+    user_type=models.PositiveSmallIntegerField(default=1, choices=USER_TYPE)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -38,9 +47,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         app_label = "fireapp"
+        verbose_name = "User"
 
 class Teacher(models.Model):
     user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
+    
 
 class Section(models.Model):
     id = models.BigAutoField(db_column='id', primary_key=True, default=1)
@@ -62,6 +73,7 @@ class Student(models.Model):
     mobile = models.PositiveBigIntegerField(default=0, blank=True)
     parents_mobile = models.PositiveBigIntegerField(default=0, blank=True)
     home_address = models.TextField(blank=True)
+
 
 
 class Subject(models.Model):
@@ -120,18 +132,18 @@ def create_user_profile(sender,instance,created,**kwargs):
     if created:
         #if instance.user_type==1:
         #    CustomUser.objects.create(user=instance)
-        if instance.user_type==2:
+        if instance.user_type == CONST_TYPE_TEACHER:
             Teacher.objects.create(user=instance)
-        if instance.user_type==3:
+        if instance.user_type == CONST_TYPE_STUDENT:
             Student.objects.create(user=instance)
 
 @receiver(post_save,sender=CustomUser)
 def save_user_profile(sender,instance,**kwargs):
     #if instance.user_type==1:
     #    instance.custom_users.save()
-    if instance.user_type==2:
-        instance.teachers.save()
-    if instance.user_type==3:
-        instance.students.save()
+    if instance.user_type == CONST_TYPE_TEACHER:
+        instance.teacher.save()
+    if instance.user_type == CONST_TYPE_STUDENT:
+        instance.student.save()
 
 

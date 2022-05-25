@@ -1,18 +1,19 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.apps import apps
-from fireapp.models import Course, Subject, Student, Teacher
+from fireapp.models import ADMIN_TYPE, CONST_TYPE_ADMIN, CONST_TYPE_STUDENT, CONST_TYPE_TEACHER, USER_TYPE, Course, Subject, Student, Teacher
 from django.contrib.auth import get_user_model
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomAdminUserCreationForm, CustomUserChangeForm, CustomUserCreateBaseForm
 CustomUser = get_user_model()
-from django.db.models import ManyToOneRel, ForeignKey, OneToOneField
+
+
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     model = Course
     list_display = ('id', 'course_abbr', 'course_name', 'get_department_name', 'course_credit')
     list_editable = ['course_credit']
-    filter_horizontal = ('subjects',) 
+    filter_horizontal = ('subjects',)
 
     @admin.display(description='Department Name', ordering='department__name')
     def get_department_name(self, obj):
@@ -77,40 +78,89 @@ class TeacherInline(admin.StackedInline):
     model = Teacher
     can_delete = False
 
+@admin.register(Teacher)
+class CustomTeacherAdmin(admin.ModelAdmin):
+    model = Teacher
+    list_display = ('get_teacher_name',)
+
+    def get_teacher_name(self, obj):
+        return obj.user.first_name
+    get_teacher_name.admin_order_field  = 'Teacher'  #Allows column order sorting
+    get_teacher_name.short_description = 'First Name'  #Renames column head
+
 @admin.register(CustomUser)
-class CustomStudentAdmin(admin.ModelAdmin):
-    add_form = CustomUserCreationForm
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreateBaseForm
+    form = CustomUserChangeForm
     ordering = ('email',)
-    list_display = ('email', 'is_active',)    
+    list_display = ('email', 'first_name', 'last_name', '_user_type', 'is_active',)
+    list_filter = ('user_type', 'is_active',)
+    search_fields = ('email', 'first_name', 'last_name')
     filter_horizontal = ('groups', 'user_permissions',)
     inlines = []
     exclude = ('is_superuser', 'last_login', 'date_joined')
-    fieldsets = (        
+    readonly_fields = ('_user_type', )
+
+    fieldsets = (       
+        ('User Information', {'fields' : ('email', 'password', '_user_type')}),
         ('Personal Information', {'fields': ('first_name', 'last_name', 'middle_name', 'birth_date', 'gender')}),
         ('Permissions', {'fields': ('is_active', 'groups', 'user_permissions')}),
     )
 
-    def get_form(self, request, obj=None, **kwargs):
-        """Override the get_form and extend the 'exclude' keyword arg"""
+    add_fieldsets = (
+        ('User Information', {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'user_type', 'is_active')}
+        ),
+        ('Personal Information', {
+            'classes': ('wide',),
+            'fields': ('first_name', 'last_name', 'middle_name', 'birth_date', 'gender')})
+    )
 
-        if obj:
-            kwargs.update({
-                'exclude': getattr(kwargs, 'exclude', tuple()) + ('email', 'is_staff', 'password', 'user_type') + CustomStudentAdmin.exclude,
-            })
-        else:
-            kwargs.update({
-                'fieldsets' : ('User Information', {'fields': ('email', 'password', 'user_type')}) + getattr(kwargs, 'fieldsets', tuple())
-            })            
+    def _user_type(self, obj):
+        return dict(ADMIN_TYPE + USER_TYPE)[int(obj.user_type)]
 
-        return super().get_form(request, obj, **kwargs)
+    #def get_form(self, request, obj=None, **kwargs):
+        
+        #if not obj:
+        #    if request.user.user_type == str(CONST_TYPE_ADMIN):
+        #        return CustomAdminUserCreationForm
+    #    return super().get_form(request, obj, **kwargs)
+
+    #def get_readonly_fields(self, request, obj=None):
+    #    if obj is None:
+            # We are adding an object
+    #        return self.readonly_fields
+    #    else:
+    #        return self.readonly_fields
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == 'user_type':
+            if request.user.user_type == str(CONST_TYPE_ADMIN):
+                kwargs['choices'] = ADMIN_TYPE + USER_TYPE
+
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
+
+    #def get_exclude(self, request, obj=None):
+    #    if obj:
+    #        return ('is_staff', 'password1', 'password2', 'user_type') + super().get_exclude(request, obj)
+                
+    #    return super().get_exclude(request, obj)
+
+    def save_model(self, request, obj, form, change):
+        obj.is_superuser = obj.user_type == 1
+        obj.is_staff = 1
+        obj.save()
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = []
         
-        if request.user.user_type == 2:    # the date
-            self.inlines = [TeacherInline]
-        if request.user.user_type == 3:    # the date
-            self.inlines = [StudentInline]
+        user = CustomUser.objects.get(pk=object_id)
+        if user:
+            if user.user_type == CONST_TYPE_TEACHER:    
+                self.inlines = [TeacherInline]
+            if user.user_type == CONST_TYPE_STUDENT:    
+                self.inlines = [StudentInline]
 
         return super().change_view(request, object_id, form_url, extra_context)
 
