@@ -4,9 +4,6 @@ from django.dispatch import receiver
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
 
 from fireapp.managers import CustomUserManager
 
@@ -25,7 +22,6 @@ class CustomUser(AbstractUser):
     user_type_data=((1,"Admin"),(2,"Teacher"),(3,"Student"))
     user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
 
-    objects = CustomUserManager()
 
     def __str__(self):
         return self.email
@@ -36,9 +32,6 @@ class CustomUser(AbstractUser):
 class Teacher(models.Model):
     id=models.AutoField(primary_key=True)
     user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
-    objects = CustomUserManager()
-    class Meta:
-        app_label = "fireapp"
 
 class Section(models.Model):
     id = models.BigAutoField(db_column='id', primary_key=True, default=1)
@@ -64,10 +57,6 @@ class Student(models.Model):
     mobile = models.PositiveBigIntegerField(default=0, blank=True)
     parents_mobile = models.PositiveBigIntegerField(default=0, blank=True)
     home_address = models.TextField(blank=True)
-    objects = CustomUserManager()
-    
-    class Meta:
-        app_label = "fireapp"
 
 
 class Courses(models.Model):
@@ -129,19 +118,19 @@ class Course(models.Model):
 @receiver(post_save,sender=CustomUser)
 def create_user_profile(sender,instance,created,**kwargs):
     if created:
-        if instance.user_type==1:
-            User.objects.create(admin=instance)
+        #if instance.user_type==1:
+        #    CustomUser.objects.create(user=instance)
         if instance.user_type==2:
-            Teacher.objects.create(admin=instance)
+            Teacher.objects.create(user=instance)
         if instance.user_type==3:
-            Student.objects.create(admin=instance)
+            Student.objects.create(user=instance)
 
 @receiver(post_save,sender=CustomUser)
 def save_user_profile(sender,instance,**kwargs):
-    if instance.user_type==1:
-        instance.user.save()
+    #if instance.user_type==1:
+    #    instance.custom_users.save()
     if instance.user_type==2:
-        instance.teacher.save()
+        instance.teachers.save()
     if instance.user_type==3:
         instance.students.save()
 
