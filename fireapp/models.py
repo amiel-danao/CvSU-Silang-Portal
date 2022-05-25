@@ -19,7 +19,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
 
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    gender = models.CharField(default="M", max_length=1, choices=GENDER_CHOICES)
     birth_date = models.DateField(default=django.utils.timezone.now)
     first_name = models.CharField(default="", blank=False, max_length=50)
     middle_name = models.CharField(blank=True, max_length=50)
