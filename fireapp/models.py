@@ -61,10 +61,6 @@ class Student(models.Model):
     home_address = models.TextField(blank=True)
 
 
-class Courses(models.Model):
-    id=models.AutoField(primary_key=True)
-    course_name=models.CharField(max_length=255)
-
 class Subject(models.Model):
     subject_name = models.CharField(max_length=50)
     unit = models.IntegerField()
