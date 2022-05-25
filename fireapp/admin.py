@@ -28,7 +28,7 @@ class CourseAdmin(admin.ModelAdmin):
         super().save_related(request, form, formsets, change)
 
 
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(admin.StackedInline):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
@@ -52,7 +52,7 @@ admin.site.register(CustomUser, CustomUserAdmin)
 
 
 
-
+"""
 StudentAdmin = lambda model: type('SubClass'+model.__name__, (admin.ModelAdmin,), {
     'list_display': [x.name for x in model._meta.fields],
     'list_select_related': [x.name for x in model._meta.fields if isinstance(x, (ManyToOneRel, ForeignKey, OneToOneField,))]
@@ -61,17 +61,24 @@ StudentAdmin = lambda model: type('SubClass'+model.__name__, (admin.ModelAdmin,)
 admin.site.register(Student, StudentAdmin(Student))
 
 """
-class CustomStudentAdmin(CustomUserAdmin):
+class CustomStudentAdmin(UserAdmin):
     model = Student
+    inlines = (CustomUserAdmin, )
+    list_display = ('get_user')
+    """
     def get_fieldsets(self, request, obj=None):
         fieldsets = list(super().get_fieldsets(request, obj))
         # update the `fieldsets` with your specific fields
         fieldsets.append(
             ('Personal info', {'fields': ('first_name', 'last_name', 'home_address')}))
         return fieldsets
+    """
+    @display(ordering='student__user', description='User')
+    def get_user(self, obj):
+        return obj.student.user
 
 admin.site.register(Student, CustomStudentAdmin)
-"""
+
 
 #class CustomStudentAdmin(admin.ModelAdmin):
 #    model = Student
