@@ -4,6 +4,9 @@ from django.dispatch import receiver
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import ugettext_lazy as _
+
+from fireapp.managers import CustomUserManager
 
 GENDER_CHOICES = (
         ('M', 'Male'),
@@ -11,8 +14,19 @@ GENDER_CHOICES = (
     )
 
 class CustomUser(AbstractUser):
+    username = None
+    email = models.EmailField(_('email address'), unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
     user_type_data=((1,"Admin"),(2,"Teacher"),(3,"Student"))
     user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
 
 class Teacher(models.Model):
     id=models.AutoField(primary_key=True)
@@ -22,10 +36,6 @@ class Teacher(models.Model):
 class Section(models.Model):
     id = models.BigAutoField(db_column='id', primary_key=True, default=1)
     section_name = models.CharField(unique=True, max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'section'
 
 
 class Student(models.Model):
@@ -43,54 +53,50 @@ class Student(models.Model):
         on_delete=models.CASCADE,
         default=1
     )
-    
+
     mobile = models.PositiveBigIntegerField(default=0, blank=True)
     parents_mobile = models.PositiveBigIntegerField(default=0, blank=True)
-    home_address = models.TextField(blank=True)    
+    home_address = models.TextField(blank=True)
+    objects=models.Manager()
 
-    class Meta:
-        db_table = 'student'
 
 class Courses(models.Model):
     id=models.AutoField(primary_key=True)
     course_name=models.CharField(max_length=255)
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now_add=True)
-    objects=models.Manager()
+
+class Subject(models.Model):
+    subject_name = models.CharField(max_length=50)
+    unit = models.IntegerField()
+
+    def __str__(self):
+        return self.subject_name
 
 class AttendanceData(models.Model):
     id = models.BigAutoField(primary_key=True)
-    scholar_no = models.CharField(max_length=15)
-    course_code = models.CharField(max_length=11)
+    section = models.ForeignKey(
+        Section,
+        on_delete=models.CASCADE,
+        default=1
+    )
     classes_attended = models.IntegerField()
     classes_total = models.IntegerField()
-    percentage = models.FloatField()
-    timestamp = models.DateTimeField()
+    date = models.DateField(default=django.utils.timezone.now)
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        default=1
+    )
 
-    class Meta:
-        managed = False
-        db_table = 'attendance_data'
 
 
 class Department(models.Model):
     id = models.BigAutoField(db_column='dept_id', primary_key=True)
     name = models.CharField(unique=True, max_length=255)
 
-    class Meta:
-        managed = False
-        db_table = 'department'
     def __str__(self):
         return self.name
 
-class Subject(models.Model):
-    subject_name = models.CharField(max_length=50)
-    unit = models.IntegerField()    
 
-    class Meta:
-        managed = False
-        db_table = 'subject'
-    def __str__(self):
-        return self.subject_name
 
 class Course(models.Model):
     id = models.BigAutoField(db_column='course_id', primary_key=True)
@@ -105,26 +111,8 @@ class Course(models.Model):
 
     subjects = models.ManyToManyField(Subject)
 
-    class Meta:
-        managed = False
-        db_table = 'courses'
     def __str__(self):
         return self.course_name
-
-
-class GradingScale(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    teacher_id = models.IntegerField()
-    course_code = models.CharField(max_length=10)
-    course_dep = models.IntegerField()
-    gradescale = models.CharField(max_length=100)
-    timestamp = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'grading_scale'
-
-
 
 
 
@@ -146,3 +134,5 @@ def save_user_profile(sender,instance,**kwargs):
         instance.teacher.save()
     if instance.user_type==3:
         instance.students.save()
+
+

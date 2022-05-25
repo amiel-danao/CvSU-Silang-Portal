@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.apps import apps
-from fireapp.models import Course, Subject, Student
+from fireapp.models import Course, Subject, Student, CustomUser
 from django.contrib.auth.models import User
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -24,12 +25,35 @@ class CourseAdmin(admin.ModelAdmin):
         obj.save()
         super().save_related(request, form, formsets, change)
 
-class CustomStudentAdmin(admin.ModelAdmin):
-    model = Student
-    exclude = ('user',)
+
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = CustomUser
+    list_display = ('email', 'is_staff', 'is_active',)
+    list_filter = ('email', 'is_staff', 'is_active',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active')}
+        ),
+    )
+    search_fields = ('email',)
+    ordering = ('email',)
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
+
+#class CustomStudentAdmin(admin.ModelAdmin):
+#    model = Student
+#    exclude = ('user',)
 
 #admin.site.unregister(User)
-admin.site.register(Student, CustomStudentAdmin)
+#admin.site.register(Student, CustomStudentAdmin)
 """
 class ProfileInline(admin.StackedInline):
     model = Profile
