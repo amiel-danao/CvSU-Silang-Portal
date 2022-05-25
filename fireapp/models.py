@@ -115,6 +115,11 @@ class Course(models.Model):
         return self.course_name
 
 
+@receiver(post_save,sender=Student)
+def create_user_profile(sender,instance,created,**kwargs):
+    if created:
+        CustomUserManager.create_student()
+
 
 @receiver(post_save,sender=CustomUser)
 def create_user_profile(sender,instance,created,**kwargs):

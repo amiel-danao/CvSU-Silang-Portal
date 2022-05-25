@@ -81,18 +81,21 @@ class TeacherInline(admin.StackedInline):
 class CustomStudentAdmin(admin.ModelAdmin):
     
     ordering = ('email',)
-    list_display = ('email', 'is_active',)
-    exclude = ('email', 'is_active', 'is_staff', 'password', 'is_superuser', 'last_login', 'date_joined', 'user_type')
+    list_display = ('email', 'is_active',)    
     filter_horizontal = ('groups', 'user_permissions',)
     inlines = []
+    exclude = ('is_superuser', 'last_login', 'date_joined')
 
-    def get_inlines(self, request, obj):
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        self.inlines = []
+        exclude = ('email', 'is_staff', 'password', 'user_type')
+        
         if request.user.user_type == 2:    # the date
-            return [TeacherInline]
+            self.inlines = [TeacherInline]
         if request.user.user_type == 3:    # the date
-            return [StudentInline]
-        # or else
-        return []
+            self.inlines = [StudentInline]
+
+        return super().change_view(request, object_id, form_url, extra_context)
 
 """
 StudentAdmin = lambda model: type('SubClass'+model.__name__, (admin.ModelAdmin,), {
