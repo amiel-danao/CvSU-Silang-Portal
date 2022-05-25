@@ -14,6 +14,7 @@ GENDER_CHOICES = (
     )
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    id = models.AutoField(primary_key=True)
     email = models.EmailField(_('email address'), unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -39,15 +40,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         app_label = "fireapp"
 
 class Teacher(models.Model):
-    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher')
+    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
 
 class Section(models.Model):
     id = models.BigAutoField(db_column='id', primary_key=True, default=1)
     section_name = models.CharField(unique=True, max_length=100)
 
+    def __str__(self):
+        return self.section_name
+
 
 class Student(models.Model):
-    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='student')
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='student', to_field='id')
     scholar_no = models.CharField(unique=True, max_length=15)    
     section = models.ForeignKey(
         Section,
