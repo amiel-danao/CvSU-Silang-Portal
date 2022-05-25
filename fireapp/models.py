@@ -46,7 +46,6 @@ class Section(models.Model):
 class Student(models.Model):
     id = models.BigAutoField(primary_key=True)
     user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
-    email = models.CharField(unique=True, blank=True, max_length=100)
     scholar_no = models.CharField(unique=True, max_length=15)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     birth_date = models.DateField(default=django.utils.timezone.now)

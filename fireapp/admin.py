@@ -1,11 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.apps import apps
-from fireapp.models import Course, Subject, Student, CustomUser
+from fireapp.models import Course, Subject, Student
 from django.contrib.auth import get_user_model
-
-User = get_user_model()
 from .forms import CustomUserCreationForm, CustomUserChangeForm
+CustomUser = get_user_model()
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -32,8 +31,9 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ('email', 'is_staff', 'is_active',)
-    list_filter = ('email', 'is_staff', 'is_active',)
+    list_display = ('email', 'is_active',)
+    list_filter = ('email', 'is_active',)
+    filter_horizontal = ('groups', 'user_permissions',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
@@ -41,12 +41,11 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active')}
+            'fields': ('email', 'password1', 'password2', 'is_active')}
         ),
     )
     search_fields = ('email',)
     ordering = ('email',)
-
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
