@@ -64,7 +64,7 @@ admin.site.register(Student, StudentAdmin(Student))
 class CustomStudentAdmin(UserAdmin):
     model = Student
     inlines = (CustomUserAdmin, )
-    list_display = ('get_user')
+    list_display = ('first_name', 'last_name')
     """
     def get_fieldsets(self, request, obj=None):
         fieldsets = list(super().get_fieldsets(request, obj))
@@ -73,9 +73,6 @@ class CustomStudentAdmin(UserAdmin):
             ('Personal info', {'fields': ('first_name', 'last_name', 'home_address')}))
         return fieldsets
     """
-    @display(ordering='student__user', description='User')
-    def get_user(self, obj):
-        return obj.student.user
 
 admin.site.register(Student, CustomStudentAdmin)
 
