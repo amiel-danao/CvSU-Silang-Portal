@@ -88,7 +88,7 @@ class CustomStudentAdmin(admin.ModelAdmin):
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = []
-        exclude = ('email', 'is_staff', 'password', 'user_type')
+        self.exclude = ('email', 'is_staff', 'password', 'user_type')
         
         if request.user.user_type == 2:    # the date
             self.inlines = [TeacherInline]
