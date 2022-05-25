@@ -92,7 +92,7 @@ class CustomStudentAdmin(admin.ModelAdmin):
             kwargs.update({
                 'exclude': getattr(kwargs, 'exclude', tuple()) + ('email', 'is_staff', 'password', 'user_type'),
             })
-        return super(SubSectionAdmin, self).get_form(request, obj, **kwargs)
+        return super().get_form(request, obj, **kwargs)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = []
