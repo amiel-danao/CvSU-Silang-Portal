@@ -5,6 +5,7 @@ from fireapp.models import Course, Subject, Student
 from django.contrib.auth import get_user_model
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 CustomUser = get_user_model()
+from django.db.models import ManyToOneRel, ForeignKey, OneToOneField
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -49,6 +50,18 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
+
+
+
+StudentAdmin = lambda model: type('SubClass'+model.__name__, (admin.ModelAdmin,), {
+    'list_display': [x.name for x in model._meta.fields],
+    'list_select_related': [x.name for x in model._meta.fields if isinstance(x, (ManyToOneRel, ForeignKey, OneToOneField,))]
+})
+
+admin.site.unregister(Student)
+admin.site.register(Student, StudentAdmin(Student))
+
+"""
 class CustomStudentAdmin(CustomUserAdmin):
     model = Student
     def get_fieldsets(self, request, obj=None):
@@ -59,6 +72,7 @@ class CustomStudentAdmin(CustomUserAdmin):
         return fieldsets
 
 admin.site.register(Student, CustomStudentAdmin)
+"""
 
 #class CustomStudentAdmin(admin.ModelAdmin):
 #    model = Student
