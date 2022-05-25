@@ -39,8 +39,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         app_label = "fireapp"
 
 class Teacher(models.Model):
-    id=models.AutoField(primary_key=True)
-    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
+    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher')
 
 class Section(models.Model):
     id = models.BigAutoField(db_column='id', primary_key=True, default=1)
@@ -48,8 +47,7 @@ class Section(models.Model):
 
 
 class Student(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='student')
     scholar_no = models.CharField(unique=True, max_length=15)    
     section = models.ForeignKey(
         Section,

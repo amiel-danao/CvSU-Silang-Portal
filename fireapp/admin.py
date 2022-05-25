@@ -71,9 +71,11 @@ admin.site.register(CustomUser, CustomStudentAdmin)
 
 class StudentInline(admin.StackedInline):
     model = Student
+    can_delete = False
 
 class TeacherInline(admin.StackedInline):
     model = Teacher
+    can_delete = False
 
 @admin.register(CustomUser)
 class CustomStudentAdmin(admin.ModelAdmin):
@@ -81,6 +83,7 @@ class CustomStudentAdmin(admin.ModelAdmin):
     ordering = ('email',)
     list_display = ('email', 'is_active',)
     exclude = ('email', 'is_active', 'is_staff', 'password', 'is_superuser', 'last_login', 'date_joined', 'user_type')
+    filter_horizontal = ('groups', 'user_permissions',)
     inlines = []
 
     def get_inlines(self, request, obj):
