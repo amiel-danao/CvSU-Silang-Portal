@@ -27,7 +27,7 @@ class CourseAdmin(admin.ModelAdmin):
         obj.save()
         super().save_related(request, form, formsets, change)
 
-
+"""
 class CustomUserAdmin(admin.StackedInline):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -49,8 +49,23 @@ class CustomUserAdmin(admin.StackedInline):
     ordering = ('email',)
 
 admin.site.register(CustomUser, CustomUserAdmin)
+"""
 
 
+class StudentInline(admin.TabularInline):
+    model = Student
+    fk_name = 'user'
+    can_delete = False
+    max_num = 1 
+    verbose_name_plural = _('student')
+
+# Define a new User admin
+class CustomStudentAdmin(UserAdmin):
+    inlines = (StudentInline, )
+
+# Re-register UserAdmin
+admin.site.unregister(CustomUser)
+admin.site.register(CustomUser, CustomStudentAdmin)
 
 """
 StudentAdmin = lambda model: type('SubClass'+model.__name__, (admin.ModelAdmin,), {
@@ -60,22 +75,21 @@ StudentAdmin = lambda model: type('SubClass'+model.__name__, (admin.ModelAdmin,)
 
 admin.site.register(Student, StudentAdmin(Student))
 
-"""
+
 class CustomStudentAdmin(UserAdmin):
     model = Student
     inlines = (CustomUserAdmin, )
     list_display = ('first_name', 'last_name')
-    """
+
     def get_fieldsets(self, request, obj=None):
         fieldsets = list(super().get_fieldsets(request, obj))
         # update the `fieldsets` with your specific fields
         fieldsets.append(
             ('Personal info', {'fields': ('first_name', 'last_name', 'home_address')}))
         return fieldsets
-    """
 
 admin.site.register(Student, CustomStudentAdmin)
-
+"""
 
 #class CustomStudentAdmin(admin.ModelAdmin):
 #    model = Student
