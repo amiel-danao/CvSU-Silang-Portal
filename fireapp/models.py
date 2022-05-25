@@ -33,7 +33,7 @@ class CustomUser(AbstractUser):
 class Teacher(models.Model):
     id=models.AutoField(primary_key=True)
     user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, default=1)
-    objects=models.Manager()
+    objects = CustomUserManager()
 
 class Section(models.Model):
     id = models.BigAutoField(db_column='id', primary_key=True, default=1)
@@ -59,7 +59,7 @@ class Student(models.Model):
     mobile = models.PositiveBigIntegerField(default=0, blank=True)
     parents_mobile = models.PositiveBigIntegerField(default=0, blank=True)
     home_address = models.TextField(blank=True)
-    objects=models.Manager()
+    objects = CustomUserManager()
 
 
 class Courses(models.Model):
