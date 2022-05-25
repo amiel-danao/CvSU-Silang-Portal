@@ -64,7 +64,6 @@ class CustomStudentAdmin(UserAdmin):
     inlines = (StudentInline, )
 
 # Re-register UserAdmin
-admin.site.unregister(CustomUser)
 admin.site.register(CustomUser, CustomStudentAdmin)
 
 """
