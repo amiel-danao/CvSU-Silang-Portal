@@ -13,10 +13,11 @@ GENDER_CHOICES = (
     )
 
 class CustomUser(AbstractUser):
+    username = None
     email = models.EmailField(_('email address'), unique=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     user_type_data=((1,"Admin"),(2,"Teacher"),(3,"Student"))
     user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
