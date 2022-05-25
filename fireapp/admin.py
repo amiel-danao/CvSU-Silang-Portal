@@ -85,12 +85,16 @@ class CustomStudentAdmin(admin.ModelAdmin):
     filter_horizontal = ('groups', 'user_permissions',)
     inlines = []
     exclude = ('is_superuser', 'last_login', 'date_joined')
+    fieldsets = (
+        ('Personal Information', {'fields': ('first_name', 'last_name', 'middle_name')}),
+        ('Permissions', {'fields': ('is_active', 'groups', 'user_permissions')}),
+    )
 
     def get_form(self, request, obj=None, **kwargs):
         """Override the get_form and extend the 'exclude' keyword arg"""
         if obj:
             kwargs.update({
-                'exclude': getattr(kwargs, 'exclude', tuple()) + ('email', 'is_staff', 'password', 'user_type'),
+                'exclude': getattr(kwargs, 'exclude', tuple()) + ('email', 'is_staff', 'password', 'user_type') + CustomStudentAdmin.exclude,
             })
         return super().get_form(request, obj, **kwargs)
 
