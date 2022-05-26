@@ -110,7 +110,7 @@ class CustomStudentAdmin(admin.ModelAdmin):
     readonly_fields = ('student_email', 'student_section')
 
     fieldsets = (       
-        (None, {'fields' : ('scholar_no', 'mobile', 'parents_mobile', 'home_address')}),
+        (None, {'fields' : ('scholar_no', 'student_email', 'student_section', 'mobile', 'parents_mobile', 'home_address')}),
     )
 
     def student_email(self, obj):
