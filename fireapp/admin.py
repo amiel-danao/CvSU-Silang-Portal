@@ -70,9 +70,9 @@ class CustomStudentAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomStudentAdmin)
 """
 
-#class StudentInline(admin.StackedInline):
-#    model = Student
-#    can_delete = False
+class StudentInline(admin.StackedInline):
+    model = Student
+    can_delete = False
 
 #class TeacherInline(admin.StackedInline):
 #    model = Teacher
@@ -203,6 +203,18 @@ class CustomUserAdmin(UserAdmin):
         obj.is_superuser = obj.user_type == CONST_TYPE_ADMIN
         obj.is_staff = 1
         obj.save()
+
+    def add_view(self, request, form_url='', extra_context=None):
+    
+        user = request.user
+        if user:
+            if user.user_type == CONST_TYPE_TEACHER:    
+                self.inlines = [TeacherInline]
+            if user.user_type == CONST_TYPE_STUDENT:    
+                self.inlines = [StudentInline]
+
+        return super(BaseMarketModelAdmin, self).add_view(
+            request, form_url, extra_context)
     """
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = []
