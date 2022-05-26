@@ -109,7 +109,7 @@ class CustomStudentAdmin(admin.ModelAdmin):
     filter_horizontal = ('subjects',)
 
     fieldsets = (       
-        (None, {'fields' : ('user', 'subjects')})
+        (None, {'fields' : ('user', 'subjects')}),
     )
 
     def get_student_name(self, obj):
