@@ -104,12 +104,11 @@ class CustomTeacherAdmin(admin.ModelAdmin):
 @admin.register(Student)
 class CustomStudentAdmin(admin.ModelAdmin):
     model = Student
-    list_display = ('get_student_name',)
-    readonly_fields = ('user', )
-    filter_horizontal = ('subjects',)
+    list_display = ('get_student_name', 'scholar_no', 'section')
+    readonly_fields = ('user', 'section')
 
     fieldsets = (       
-        (None, {'fields' : ('user', 'subjects')}),
+        (None, {'fields' : ('user', 'scholar_no', 'section', 'mobile', 'parents_mobile', 'home_address')}),
     )
 
     def get_student_name(self, obj):
