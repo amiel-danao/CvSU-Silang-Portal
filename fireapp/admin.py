@@ -86,7 +86,7 @@ class CustomTeacherAdmin(admin.ModelAdmin):
     filter_horizontal = ('sections',)
 
     fieldsets = (       
-        (None, {'fields' : ('user', 'sections')})
+        (None, {'fields' : ('user', 'sections')}),
     )
 
     def get_teacher_name(self, obj):
