@@ -105,18 +105,18 @@ class CustomTeacherAdmin(admin.ModelAdmin):
 class CustomStudentAdmin(admin.ModelAdmin):
     model = Student
     list_display = ('get_student_name', 'scholar_no', 'section')
-    list_filter = ('section', 'is_active',)
+    list_filter = ('section', )
     search_fields = ('scholar_no', )
-    readonly_fields = ('_student_email', '_student_section')
+    readonly_fields = ('student_email', 'student_section')
 
     fieldsets = (       
-        (None, {'fields' : ('scholar_no', '_student_email', '_student_section', 'mobile', 'parents_mobile', 'home_address')}),
+        (None, {'fields' : ('scholar_no', 'student_email', 'student_section', 'mobile', 'parents_mobile', 'home_address')}),
     )
 
-    def _student_email(self, obj):
+    def student_email(self, obj):
         return obj.user.email
 
-    def _student_section(self, obj):
+    def student_section(self, obj):
         return obj.section
 
     def get_student_name(self, obj):

@@ -56,9 +56,21 @@ class Section(models.Model):
     def __str__(self):
         return self.section_name
 
+class Department(models.Model):
+    id = models.BigAutoField(db_column='dept_id', primary_key=True)
+    name = models.CharField(unique=True, max_length=255)
+
+    def __str__(self):
+        return self.name
+
 class Teacher(models.Model):
-    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
-    sections=models.ManyToManyField(Section)
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
+    sections = models.ManyToManyField(Section)
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.CASCADE,
+        default=1
+    )
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
@@ -102,16 +114,6 @@ class AttendanceData(models.Model):
         on_delete=models.CASCADE,
         default=1
     )
-
-
-
-class Department(models.Model):
-    id = models.BigAutoField(db_column='dept_id', primary_key=True)
-    name = models.CharField(unique=True, max_length=255)
-
-    def __str__(self):
-        return self.name
-
 
 
 class Course(models.Model):
