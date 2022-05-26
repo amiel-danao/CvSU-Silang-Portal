@@ -140,7 +140,7 @@ class CustomUserAdmin(UserAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.user_type == CONST_TYPE_TEACHER:
-            return qs.filter(user_type!=CONST_TYPE_ADMIN)
+            return qs.exclude(user_type=CONST_TYPE_ADMIN)
         elif request.user.user_type == CONST_TYPE_STUDENT:
             return qs.filter(id=request.user.id)
         else:
