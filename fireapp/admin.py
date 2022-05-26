@@ -203,7 +203,7 @@ class CustomUserAdmin(UserAdmin):
         obj.is_superuser = obj.user_type == CONST_TYPE_ADMIN
         obj.is_staff = 1
         obj.save()
-
+    """
     def add_view(self, request, form_url='', extra_context=None):
     
         user = request.user
@@ -215,7 +215,7 @@ class CustomUserAdmin(UserAdmin):
 
         return super(BaseMarketModelAdmin, self).add_view(
             request, form_url, extra_context)
-    """
+    
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = []
         
