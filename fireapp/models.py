@@ -1,5 +1,6 @@
 import django
-from django.db.models.signals import post_save
+from django.contrib.auth.models import Group
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -142,8 +143,16 @@ def create_user_profile(sender,instance,created,**kwargs):
         #    CustomUser.objects.create(user=instance)
         if instance.user_type == CONST_TYPE_TEACHER:
             Teacher.objects.create(user=instance)
+            group = Group.objects.get(name='Teachers')
+            if group:
+                instance.groups.add(group)
+                instance.save()
         if instance.user_type == CONST_TYPE_STUDENT:
             Student.objects.create(user=instance)
+            group = Group.objects.get(name='Students')
+            if group:
+                instance.groups.add(group)
+                instance.save()
 
 @receiver(post_save,sender=CustomUser)
 def save_user_profile(sender,instance,**kwargs):

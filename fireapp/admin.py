@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.apps import apps
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from fireapp.models import ADMIN_TYPE, CONST_TYPE_ADMIN, CONST_TYPE_STUDENT, CONST_TYPE_TEACHER, USER_TYPE, Course, Subject, Student, Teacher
 from django.contrib.auth import get_user_model
 from .forms import CustomAdminUserCreationForm, CustomUserChangeForm, CustomUserCreateBaseForm
@@ -101,6 +103,12 @@ class CustomTeacherAdmin(admin.ModelAdmin):
         else:
             return qs
 
+    def changelist_view(self, request, extra_context=None):
+        if request.user.user_type == CONST_TYPE_TEACHER:
+            user = request.user
+            return HttpResponseRedirect(reverse("admin:%s_%s_change" %(self.model._meta.app_label, self.model._meta.model_name), args=(user.id,)))
+        return super().changelist_view(request=request, extra_context=extra_context)
+
 @admin.register(Student)
 class CustomStudentAdmin(admin.ModelAdmin):
     model = Student
@@ -121,6 +129,12 @@ class CustomStudentAdmin(admin.ModelAdmin):
     get_student_name.admin_order_field  = 'Student'  #Allows column order sorting
     get_student_name.short_description = 'Student Name'  #Renames column head
 
+    def changelist_view(self, request, extra_context=None):
+        if request.user.user_type == CONST_TYPE_STUDENT:
+            user = request.user
+            return HttpResponseRedirect(reverse("admin:%s_%s_change" %(self.model._meta.app_label, self.model._meta.model_name), args=(user.id,)))
+        return super().changelist_view(request=request, extra_context=extra_context)
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.user_type == CONST_TYPE_STUDENT:
@@ -129,7 +143,7 @@ class CustomStudentAdmin(admin.ModelAdmin):
             return qs
 
     def get_readonly_fields(self, request, obj=None):
-        if obj and not request.user.user_type == CONST_TYPE_STUDENT:
+        if obj and request.user.user_type == CONST_TYPE_STUDENT:
             # We are adding an object
             return self.readonly_fields + ('section', 'scholar_no')
         else:
@@ -175,6 +189,12 @@ class CustomUserAdmin(UserAdmin):
 
     def _user_type(self, obj):
         return dict(ADMIN_TYPE + USER_TYPE)[int(obj.user_type)]
+
+    def changelist_view(self, request, extra_context=None):
+        if request.user.user_type == CONST_TYPE_STUDENT:
+            user = request.user
+            return HttpResponseRedirect(reverse("admin:%s_%s_change" %(self.model._meta.app_label, self.model._meta.model_name), args=(user.id,)))
+        return super().changelist_view(request=request, extra_context=extra_context)
 
     #def get_form(self, request, obj=None, **kwargs):
         
