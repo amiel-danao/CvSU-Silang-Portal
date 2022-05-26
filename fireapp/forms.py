@@ -37,4 +37,4 @@ class CustomUserChangeForm(LoggingMixin, UserChangeForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'user_type', )
+        fields = ('email', 'user_type', 'groups', 'user_permissions')

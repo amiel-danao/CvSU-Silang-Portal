@@ -172,12 +172,12 @@ class CustomUserAdmin(UserAdmin):
         #        return CustomAdminUserCreationForm
     #    return super().get_form(request, obj, **kwargs)
 
-    #def get_readonly_fields(self, request, obj=None):
-    #    if obj is None:
+    def get_readonly_fields(self, request, obj=None):
+        if obj and not request.user.user_type == CONST_TYPE_ADMIN:
             # We are adding an object
-    #        return self.readonly_fields
-    #    else:
-    #        return self.readonly_fields
+            return self.readonly_fields + ('user_permissions', 'groups')
+        else:
+            return self.readonly_fields
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         if db_field.name == 'user_type':
@@ -186,11 +186,11 @@ class CustomUserAdmin(UserAdmin):
 
         return super().formfield_for_choice_field(db_field, request, **kwargs)
 
-    def get_exclude(self, request, obj=None):
-        if obj and not request.user.user_type == CONST_TYPE_ADMIN:
-            return ('user_permissions', 'groups') + super().get_exclude(request, obj)
+    #def get_exclude(self, request, obj=None):
+    #    if obj and not request.user.user_type == CONST_TYPE_ADMIN:
+    #        return ('user_permissions', 'groups') + super().get_exclude(request, obj)
                 
-        return super().get_exclude(request, obj)
+    #    return super().get_exclude(request, obj)
 
     def save_model(self, request, obj, form, change):
         obj.is_superuser = obj.user_type == CONST_TYPE_ADMIN
