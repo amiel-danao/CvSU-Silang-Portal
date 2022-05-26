@@ -82,6 +82,7 @@ class TeacherInline(admin.StackedInline):
 class CustomTeacherAdmin(admin.ModelAdmin):
     model = Teacher
     list_display = ('get_teacher_name',)
+    readonly_fields = ('user', )
 
     def get_teacher_name(self, obj):
         return obj.user.first_name
@@ -100,6 +101,13 @@ class CustomUserAdmin(UserAdmin):
     inlines = []
     exclude = ('is_superuser', 'last_login', 'date_joined')
     readonly_fields = ('_user_type', )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.user_type == CONST_TYPE_TEACHER:
+            return qs.filter(user_type=CONST_TYPE_TEACHER)
+        else:
+            return qs
 
     fieldsets = (       
         ('User Information', {'fields' : ('email', 'password', '_user_type')}),

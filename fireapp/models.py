@@ -49,10 +49,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         app_label = "fireapp"
         verbose_name = "User"
 
-class Teacher(models.Model):
-    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
-    
-
 class Section(models.Model):
     id = models.BigAutoField(db_column='id', primary_key=True, default=1)
     section_name = models.CharField(unique=True, max_length=100)
@@ -60,6 +56,13 @@ class Section(models.Model):
     def __str__(self):
         return self.section_name
 
+class Teacher(models.Model):
+    user=models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
+    sections=models.ManyToManyField(Section)
+
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
+    
 
 class Student(models.Model):
     user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='student', to_field='id')
@@ -74,7 +77,8 @@ class Student(models.Model):
     parents_mobile = models.PositiveBigIntegerField(default=0, blank=True)
     home_address = models.TextField(blank=True)
 
-
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
 
 class Subject(models.Model):
     subject_name = models.CharField(max_length=50)
