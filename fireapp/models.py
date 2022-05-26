@@ -69,7 +69,8 @@ class Teacher(models.Model):
     department = models.ForeignKey(
         Department,
         on_delete=models.CASCADE,
-        blank=True
+        blank=True,
+        null=True
     )
 
     def __str__(self):
@@ -82,7 +83,8 @@ class Student(models.Model):
     section = models.ForeignKey(
         Section,
         on_delete=models.CASCADE,
-        blank=True
+        blank=True,
+        null=True
     )
 
     mobile = models.PositiveBigIntegerField(default=0, blank=True)
