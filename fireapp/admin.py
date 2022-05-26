@@ -70,24 +70,59 @@ class CustomStudentAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomStudentAdmin)
 """
 
-class StudentInline(admin.StackedInline):
-    model = Student
-    can_delete = False
+#class StudentInline(admin.StackedInline):
+#    model = Student
+#    can_delete = False
 
-class TeacherInline(admin.StackedInline):
-    model = Teacher
-    can_delete = False
+#class TeacherInline(admin.StackedInline):
+#    model = Teacher
+#    can_delete = False
 
 @admin.register(Teacher)
 class CustomTeacherAdmin(admin.ModelAdmin):
     model = Teacher
     list_display = ('get_teacher_name',)
     readonly_fields = ('user', )
+    filter_horizontal = ('sections',)
+
+    fieldsets = (       
+        (None, {'fields' : ('user', 'sections')})
+    )
 
     def get_teacher_name(self, obj):
-        return obj.user.first_name
+        return obj.user.first_name + " " + obj.user.last_name
     get_teacher_name.admin_order_field  = 'Teacher'  #Allows column order sorting
-    get_teacher_name.short_description = 'First Name'  #Renames column head
+    get_teacher_name.short_description = 'Teacher Name'  #Renames column head
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.user_type == CONST_TYPE_TEACHER:
+            return qs.filter(user=request.user)
+        else:
+            return qs
+
+@admin.register(Student)
+class CustomStudentAdmin(admin.ModelAdmin):
+    model = Student
+    list_display = ('get_student_name',)
+    readonly_fields = ('user', )
+    filter_horizontal = ('subjects',)
+
+    fieldsets = (       
+        (None, {'fields' : ('user', 'subjects')})
+    )
+
+    def get_student_name(self, obj):
+        return obj.user.first_name + " " + obj.user.last_name
+    get_student_name.admin_order_field  = 'Student'  #Allows column order sorting
+    get_student_name.short_description = 'Student Name'  #Renames column head
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.user_type == CONST_TYPE_STUDENT:
+            return qs.filter(user=request.user)
+        else:
+            return qs
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
@@ -98,14 +133,16 @@ class CustomUserAdmin(UserAdmin):
     list_filter = ('user_type', 'is_active',)
     search_fields = ('email', 'first_name', 'last_name')
     filter_horizontal = ('groups', 'user_permissions',)
-    inlines = []
+    #inlines = []
     exclude = ('is_superuser', 'last_login', 'date_joined')
     readonly_fields = ('_user_type', )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.user_type == CONST_TYPE_TEACHER:
-            return qs.filter(user_type=CONST_TYPE_TEACHER)
+            return qs.filter(user_type!=CONST_TYPE_ADMIN)
+        elif request.user.user_type == CONST_TYPE_STUDENT:
+            return qs.filter(id=request.user.id)
         else:
             return qs
 
@@ -149,17 +186,17 @@ class CustomUserAdmin(UserAdmin):
 
         return super().formfield_for_choice_field(db_field, request, **kwargs)
 
-    #def get_exclude(self, request, obj=None):
-    #    if obj:
-    #        return ('is_staff', 'password1', 'password2', 'user_type') + super().get_exclude(request, obj)
+    def get_exclude(self, request, obj=None):
+        if obj and not request.user.user_type == CONST_TYPE_ADMIN:
+            return ('user_permissions', 'groups') + super().get_exclude(request, obj)
                 
-    #    return super().get_exclude(request, obj)
+        return super().get_exclude(request, obj)
 
     def save_model(self, request, obj, form, change):
-        obj.is_superuser = obj.user_type == 1
+        obj.is_superuser = obj.user_type == CONST_TYPE_ADMIN
         obj.is_staff = 1
         obj.save()
-
+    """
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.inlines = []
         
@@ -171,7 +208,7 @@ class CustomUserAdmin(UserAdmin):
                 self.inlines = [StudentInline]
 
         return super().change_view(request, object_id, form_url, extra_context)
-
+    """
 """
 StudentAdmin = lambda model: type('SubClass'+model.__name__, (admin.ModelAdmin,), {
     'list_display': [x.name for x in model._meta.fields],
