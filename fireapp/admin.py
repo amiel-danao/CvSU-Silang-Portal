@@ -107,17 +107,14 @@ class CustomStudentAdmin(admin.ModelAdmin):
     list_display = ('get_student_name', 'scholar_no', 'section')
     list_filter = ('section', )
     search_fields = ('scholar_no', )
-    readonly_fields = ('student_email', 'student_section')
+    readonly_fields = ('student_email', )
 
     fieldsets = (       
-        (None, {'fields' : ('scholar_no', 'student_email', 'student_section', 'mobile', 'parents_mobile', 'home_address')}),
+        (None, {'fields' : ('scholar_no', 'student_email', 'section', 'mobile', 'parents_mobile', 'home_address')}),
     )
 
     def student_email(self, obj):
         return obj.user.email
-
-    def student_section(self, obj):
-        return obj.section
 
     def get_student_name(self, obj):
         return obj.user.first_name + " " + obj.user.last_name
@@ -130,6 +127,13 @@ class CustomStudentAdmin(admin.ModelAdmin):
             return qs.filter(user=request.user)
         else:
             return qs
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and not request.user.user_type == CONST_TYPE_STUDENT:
+            # We are adding an object
+            return self.readonly_fields + ('section', 'scholar_no')
+        else:
+            return self.readonly_fields
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):

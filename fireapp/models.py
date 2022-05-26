@@ -155,3 +155,20 @@ def save_user_profile(sender,instance,**kwargs):
         instance.student.save()
 
 
+@receiver(post_delete,sender=CustomUser)
+def delete_user(sender,instance,*args,**kwargs):
+    #write your login when user profile is deleted.
+    if instance.user_type == CONST_TYPE_TEACHER:
+        Teacher.objects.filter(user=instance).delete()
+    if instance.user_type == CONST_TYPE_STUDENT:
+        Student.objects.filter(user=instance).delete()
+
+@receiver(post_delete,sender=Student)
+def delete_student(sender,instance,*args,**kwargs):
+    #write your login when user profile is deleted.
+    CustomUser.objects.filter(id=instance.user.id).delete()
+
+@receiver(post_delete,sender=Teacher)
+def delete_teacher(sender,instance,*args,**kwargs):
+    #write your login when user profile is deleted.
+    CustomUser.objects.filter(id=instance.user.id).delete()
