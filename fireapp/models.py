@@ -67,7 +67,7 @@ class Department(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='student', to_field='id')
     scholar_no = models.CharField(unique=True, max_length=15)
-    date_enrolled = models.DateField()
+    date_enrolled = models.DateField(default=django.utils.timezone.now)
     section = models.ForeignKey(
         Section,
         on_delete=models.SET_NULL,
