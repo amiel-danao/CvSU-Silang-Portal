@@ -132,6 +132,9 @@ class Quiz(models.Model):
     quiz_datas = models.ManyToManyField(QuizData)
     total_score = models.IntegerField()
 
+    class Meta:
+        verbose_name_plural = "quizzes"
+
 class Course(models.Model):
     id = models.BigAutoField(db_column='course_id', primary_key=True)
     course_name = models.CharField(unique=True, max_length=100)
