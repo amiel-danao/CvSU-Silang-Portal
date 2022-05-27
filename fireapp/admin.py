@@ -210,7 +210,7 @@ class CustomUserAdmin(UserAdmin):
     """
 
 @admin.register(QuizData)
-class QuizDataAdmin(mode.ModelAdmin):
+class QuizDataAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         form.base_fields['student'].widget.can_add_related = False
