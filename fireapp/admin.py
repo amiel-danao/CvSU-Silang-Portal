@@ -234,6 +234,11 @@ class AttendanceDatadmin(admin.ModelAdmin):
         form.base_fields['students_attended'].widget.can_change_related = False
         return form
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "students_attended":
+            kwargs["queryset"] = Student.objects.filter(section=request.user)
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
 app_config = apps.get_app_config('fireapp') # Replace your_app_name it is just a placeholder
 models = app_config.get_models()
 
