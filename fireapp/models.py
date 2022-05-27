@@ -92,7 +92,7 @@ class Subject(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
-    teacher_id = models.CharField(max_length=40, unique=True)
+    teacher_id = models.CharField(max_length=40, unique=True, null=True)
     sections = models.ManyToManyField(Section)
     department = models.ForeignKey(
         Department,
