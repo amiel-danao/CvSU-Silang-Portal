@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.apps import apps
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from fireapp.models import ADMIN_TYPE, CONST_TYPE_ADMIN, CONST_TYPE_STUDENT, CONST_TYPE_TEACHER, USER_TYPE, Course, Subject, Student, Teacher
+from fireapp.models import ADMIN_TYPE, CONST_TYPE_ADMIN, CONST_TYPE_STUDENT, CONST_TYPE_TEACHER, USER_TYPE, AttendanceData, Course, Subject, Student, Teacher, Quiz, QuizData
 from django.contrib.auth import get_user_model
 from .forms import CustomAdminUserCreationForm, CustomUserChangeForm, CustomUserCreateBaseForm
 CustomUser = get_user_model()
@@ -208,6 +208,31 @@ class CustomUserAdmin(UserAdmin):
 
         return super().change_view(request, object_id, form_url, extra_context)
     """
+
+@admin.register(QuizData)
+class QuizDataAdmin(mode.ModelAdmin):
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['student'].widget.can_add_related = False
+        form.base_fields['student'].widget.can_delete_related = False
+        form.base_fields['student'].widget.can_change_related = False
+        return form
+
+@admin.register(Quiz)
+class Quizdmin(admin.ModelAdmin):
+    filter_horizontal = ('quiz_datas',)
+
+@admin.register(AttendanceData)
+class AttendanceDatadmin(admin.ModelAdmin):
+
+    filter_horizontal = ('students_attended',)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['students_attended'].widget.can_add_related = False
+        form.base_fields['students_attended'].widget.can_delete_related = False
+        form.base_fields['students_attended'].widget.can_change_related = False
+        return form
 
 app_config = apps.get_app_config('fireapp') # Replace your_app_name it is just a placeholder
 models = app_config.get_models()
