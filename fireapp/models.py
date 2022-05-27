@@ -92,6 +92,7 @@ class Subject(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
+    teacher_id = models.CharField(max=50, blank=False, null=False)
     sections = models.ManyToManyField(Section)
     department = models.ForeignKey(
         Department,
@@ -116,6 +117,9 @@ class AttendanceData(models.Model):
     )
 
     students_attended = models.ManyToManyField(Student)
+
+    class Meta:
+        unique_together = ('date', 'section',)
 
 class QuizData(models.Model):    
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
