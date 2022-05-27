@@ -51,7 +51,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = "User"
 
 class Section(models.Model):
-    id = models.BigAutoField(db_column='id', primary_key=True, default=1)
+    id = models.BigAutoField(db_column='id', primary_key=True)
     section_name = models.CharField(unique=True, max_length=100)
 
     def __str__(self):
@@ -64,26 +64,13 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
-class Teacher(models.Model):
-    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
-    sections = models.ManyToManyField(Section)
-    department = models.ForeignKey(
-        Department,
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True
-    )
-
-    def __str__(self):
-        return self.user.first_name + " " + self.user.last_name
-    
-
 class Student(models.Model):
     user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='student', to_field='id')
-    scholar_no = models.CharField(unique=True, max_length=15)    
+    scholar_no = models.CharField(unique=True, max_length=15)
+    date_enrolled = models.DateField()
     section = models.ForeignKey(
         Section,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True
     )
@@ -91,6 +78,7 @@ class Student(models.Model):
     mobile = models.PositiveBigIntegerField(default=0, blank=True)
     parents_mobile = models.PositiveBigIntegerField(default=0, blank=True)
     home_address = models.TextField(blank=True)
+
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
@@ -102,22 +90,43 @@ class Subject(models.Model):
     def __str__(self):
         return self.subject_name
 
+class Teacher(models.Model):
+    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
+    sections = models.ManyToManyField(Section)
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+    subjects = models.ManyToManyField(Subject)
+
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
+    
+
 class AttendanceData(models.Model):
     id = models.BigAutoField(primary_key=True)
+    date = models.DateField(default=django.utils.timezone.now)
+
     section = models.ForeignKey(
         Section,
-        on_delete=models.CASCADE,
-        default=1
-    )
-    classes_attended = models.IntegerField()
-    classes_total = models.IntegerField()
-    date = models.DateField(default=django.utils.timezone.now)
-    subject = models.ForeignKey(
-        Subject,
-        on_delete=models.CASCADE,
-        default=1
+        on_delete=models.SET_NULL,
+        null=True
     )
 
+    students_attended = models.ManyToManyField(Student)
+
+class QuizData(models.Model):    
+    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+    score = models.IntegerField()
+    date_taken = models.DateTimeField(null=False)
+
+class Quiz(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(unique=True, max_length=255)
+    quiz_datas = models.ManyToManyField(QuizData)
+    total_score = models.IntegerField()
 
 class Course(models.Model):
     id = models.BigAutoField(db_column='course_id', primary_key=True)
@@ -125,8 +134,9 @@ class Course(models.Model):
     course_abbr = models.CharField(db_column='course_abbr', max_length=20, blank=True, default='')
     course_department = models.ForeignKey(
         Department,
-        on_delete=models.CASCADE,
-        db_column='course_department_id'
+        on_delete=models.SET_NULL,
+        db_column='course_department_id',
+        null=True
     )
     course_credit = models.PositiveSmallIntegerField()
 
@@ -139,8 +149,6 @@ class Course(models.Model):
 @receiver(post_save,sender=CustomUser)
 def create_user_profile(sender,instance,created,**kwargs):
     if created:
-        #if instance.user_type==1:
-        #    CustomUser.objects.create(user=instance)
         if instance.user_type == CONST_TYPE_TEACHER:
             Teacher.objects.create(user=instance)
             group = Group.objects.get(name='Teachers')
@@ -156,8 +164,6 @@ def create_user_profile(sender,instance,created,**kwargs):
 
 @receiver(post_save,sender=CustomUser)
 def save_user_profile(sender,instance,**kwargs):
-    #if instance.user_type==1:
-    #    instance.custom_users.save()
     if instance.user_type == CONST_TYPE_TEACHER:
         instance.teacher.save()
     if instance.user_type == CONST_TYPE_STUDENT:
@@ -166,7 +172,6 @@ def save_user_profile(sender,instance,**kwargs):
 
 @receiver(post_delete,sender=CustomUser)
 def delete_user(sender,instance,*args,**kwargs):
-    #write your login when user profile is deleted.
     if instance.user_type == CONST_TYPE_TEACHER:
         Teacher.objects.filter(user=instance).delete()
     if instance.user_type == CONST_TYPE_STUDENT:
@@ -174,10 +179,8 @@ def delete_user(sender,instance,*args,**kwargs):
 
 @receiver(post_delete,sender=Student)
 def delete_student(sender,instance,*args,**kwargs):
-    #write your login when user profile is deleted.
     CustomUser.objects.filter(id=instance.user.id).delete()
 
 @receiver(post_delete,sender=Teacher)
 def delete_teacher(sender,instance,*args,**kwargs):
-    #write your login when user profile is deleted.
     CustomUser.objects.filter(id=instance.user.id).delete()
