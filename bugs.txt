@@ -1,0 +1,11 @@
+bug when adding more than 1 section
+bug when adding more than 1 student
+teacher can still add co-teacher!
+teacher My Account link 
+Column of Subject Unit
+Teacher should change his department
+Teacher header should not be clickable
+Section should list all students
+User duplicate error when adding more than 1
+Footer css
+remove search
