@@ -6,6 +6,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from datetime import date
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from fireapp.managers import CustomUserManager
 
@@ -19,9 +21,8 @@ CONST_TYPE_ADMIN = 1
 CONST_TYPE_TEACHER = 2
 CONST_TYPE_STUDENT = 3
 ADMIN_TYPE = ((CONST_TYPE_ADMIN,"Admin"),)
-USER_TYPE =(
-    (CONST_TYPE_TEACHER,"Teacher"),
-    (CONST_TYPE_STUDENT,"Student"))
+TEACHER_TYPE = ((CONST_TYPE_TEACHER,"Teacher"),)
+STUDENT_TYPE = ((CONST_TYPE_STUDENT,"Student"),)
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
@@ -36,7 +37,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     middle_name = models.CharField(blank=True, max_length=50)
     last_name = models.CharField(default="", blank=False, max_length=50)
     
-    user_type=models.PositiveSmallIntegerField(default=1, choices=USER_TYPE)
+    user_type=models.PositiveSmallIntegerField(default=1, choices=TEACHER_TYPE + STUDENT_TYPE)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -64,6 +65,31 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
+class Subject(models.Model):
+    subject_name = models.CharField(max_length=50)
+    unit = models.IntegerField()
+
+    def __str__(self):
+        return self.subject_name
+
+class Course(models.Model):
+    id = models.BigAutoField(db_column='course_id', primary_key=True)
+    course_name = models.CharField(unique=True, max_length=100)
+    course_abbr = models.CharField(db_column='course_abbr', max_length=20, blank=True, default='')
+    course_department = models.ForeignKey(
+        Department,
+        on_delete=models.SET_NULL,
+        db_column='course_department_id',
+        null=True
+    )
+    course_credit = models.PositiveSmallIntegerField()
+
+    subjects = models.ManyToManyField(Subject)
+
+    def __str__(self):
+        return self.course_name
+
+
 class Student(models.Model):
     user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='student', to_field='id')
     scholar_no = models.CharField(unique=True, max_length=15)
@@ -75,20 +101,34 @@ class Student(models.Model):
         null=True
     )
 
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+
+    current_year = models.PositiveSmallIntegerField(
+        default=1, validators=[MaxValueValidator(6), MinValueValidator(1)]
+    )
+
+    current_semester = models.PositiveSmallIntegerField(
+        default=1, validators=[MaxValueValidator(4), MinValueValidator(1)]
+    )
+
     mobile = models.PositiveBigIntegerField(default=0, blank=True)
     parents_mobile = models.PositiveBigIntegerField(default=0, blank=True)
     home_address = models.TextField(blank=True)
 
-
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
-class Subject(models.Model):
-    subject_name = models.CharField(max_length=50)
-    unit = models.IntegerField()
+    class Meta:
+        permissions = [
+            ("is_student", "Student account"),
+        ]
 
-    def __str__(self):
-        return self.subject_name
+
 
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
@@ -104,7 +144,36 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
-    
+
+    class Meta:
+        permissions = [
+            ("is_teacher", "Teacher account"),
+        ]
+
+class Grade(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    grade = models.PositiveSmallIntegerField(default=0, blank=False)
+
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.SET_NULL,
+        null=True)
+    student_year = models.PositiveSmallIntegerField(
+        default=1, validators=[MaxValueValidator(6), MinValueValidator(1)]
+    )
+
+    student_semester = models.PositiveSmallIntegerField(
+        default=1, validators=[MaxValueValidator(4), MinValueValidator(1)]
+    )
+
+    class Meta:
+        unique_together = ('student', 'subject', 'student_year', 'student_semester')
+
 
 class AttendanceData(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -126,6 +195,9 @@ class QuizData(models.Model):
     score = models.IntegerField()
     date_taken = models.DateTimeField(null=False)
 
+    def __str__(self):
+        return 'Quiz - (' + str(self.score) + ')' + self.student.user.first_name + ' ' + self.student.user.last_name
+
 class Quiz(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=255)
@@ -134,36 +206,24 @@ class Quiz(models.Model):
 
     class Meta:
         verbose_name_plural = "quizzes"
-
-class Course(models.Model):
-    id = models.BigAutoField(db_column='course_id', primary_key=True)
-    course_name = models.CharField(unique=True, max_length=100)
-    course_abbr = models.CharField(db_column='course_abbr', max_length=20, blank=True, default='')
-    course_department = models.ForeignKey(
-        Department,
-        on_delete=models.SET_NULL,
-        db_column='course_department_id',
-        null=True
-    )
-    course_credit = models.PositiveSmallIntegerField()
-
-    subjects = models.ManyToManyField(Subject)
-
     def __str__(self):
-        return self.course_name
+        return self.name
+
 
 
 @receiver(post_save,sender=CustomUser)
 def create_user_profile(sender,instance,created,**kwargs):
     if created:
         if instance.user_type == CONST_TYPE_TEACHER:
-            Teacher.objects.create(user=instance)
+            new_teacher_id = str(date.today().year) + '-E' + str(instance.id).zfill(5)
+            Teacher.objects.create(user=instance, teacher_id=new_teacher_id)
             group = Group.objects.get(name='Teachers')
             if group:
                 instance.groups.add(group)
                 instance.save()
         if instance.user_type == CONST_TYPE_STUDENT:
-            Student.objects.create(user=instance)
+            new_scholar_no = str(date.today().year) + '-' + str(instance.id).zfill(5)
+            Student.objects.create(user=instance, scholar_no=new_scholar_no)
             group = Group.objects.get(name='Students')
             if group:
                 instance.groups.add(group)

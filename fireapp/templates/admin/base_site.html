@@ -8,6 +8,15 @@
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
+    <style>
+        .site-footer{
+            position: fixed !important;
+            left: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+        }
+    </style>
+
     {% if debug %}
         <script src="http://localhost:8000/static/baton/app/dist/baton.min.js"></script>
     {% else  %}

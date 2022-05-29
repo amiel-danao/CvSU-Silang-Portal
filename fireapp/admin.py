@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.apps import apps
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from fireapp.models import ADMIN_TYPE, CONST_TYPE_ADMIN, CONST_TYPE_STUDENT, CONST_TYPE_TEACHER, USER_TYPE, AttendanceData, Course, Subject, Student, Teacher, Quiz, QuizData
+from fireapp.models import ADMIN_TYPE, CONST_TYPE_ADMIN, CONST_TYPE_STUDENT, CONST_TYPE_TEACHER, STUDENT_TYPE, TEACHER_TYPE, AttendanceData, Course, Department, Grade, Section, Subject, Student, Teacher, Quiz, QuizData
 from django.contrib.auth import get_user_model
 from .forms import CustomAdminUserCreationForm, CustomUserChangeForm, CustomUserCreateBaseForm
 CustomUser = get_user_model()
@@ -39,12 +39,17 @@ class StudentInline(admin.StackedInline):
 @admin.register(Teacher)
 class CustomTeacherAdmin(admin.ModelAdmin):
     model = Teacher
-    list_display = ('get_teacher_name',)
-    readonly_fields = ('user', )
-    filter_horizontal = ('sections',)
+    list_display = ('get_teacher_name', 'teacher_id', 'department', )
+    readonly_fields = ('user', 'get_teacher_name')
+    filter_horizontal = ('sections', 'subjects')
+
+    sortable_by = (
+        'teacher_id'
+        'department',
+    )
 
     fieldsets = (       
-        (None, {'fields' : ('user', 'sections')}),
+        (None, {'fields' : ('user', 'get_teacher_name', 'teacher_id', 'department', 'sections', 'subjects')}),
     )
 
     def get_teacher_name(self, obj):
@@ -68,13 +73,22 @@ class CustomTeacherAdmin(admin.ModelAdmin):
 @admin.register(Student)
 class CustomStudentAdmin(admin.ModelAdmin):
     model = Student
-    list_display = ('get_student_name', 'scholar_no', 'section')
+    list_display = ('get_student_name', 'scholar_no', 'section', 'current_year', 'current_semester')
     list_filter = ('section', )
     search_fields = ('scholar_no', )
-    readonly_fields = ('student_email', )
+    readonly_fields = ('student_email', 'get_student_name')
+
+    sortable_by = (
+        "scholar_no",
+        "section",
+        "current_year",
+        "current_semester",
+    )
+
+    #fields = ('scholar_no', 'student_email', 'get_student_name', 'section', 'current_year', 'current_semester', 'mobile', 'parents_mobile', 'home_address')
 
     fieldsets = (       
-        (None, {'fields' : ('scholar_no', 'student_email', 'section', 'mobile', 'parents_mobile', 'home_address')}),
+        (None, {'fields' : ('scholar_no', 'student_email', 'get_student_name', 'section', 'current_year', 'current_semester', 'mobile', 'parents_mobile', 'home_address')}),
     )
 
     def student_email(self, obj):
@@ -144,7 +158,7 @@ class CustomUserAdmin(UserAdmin):
     )
 
     def _user_type(self, obj):
-        return dict(ADMIN_TYPE + USER_TYPE)[int(obj.user_type)]
+        return dict(ADMIN_TYPE + TEACHER_TYPE + STUDENT_TYPE)[int(obj.user_type)]
 
     def changelist_view(self, request, extra_context=None):
         if request.user.user_type == CONST_TYPE_STUDENT:
@@ -162,14 +176,16 @@ class CustomUserAdmin(UserAdmin):
     def get_readonly_fields(self, request, obj=None):
         if obj and not request.user.user_type == CONST_TYPE_ADMIN:
             # We are adding an object
-            return self.readonly_fields + ('user_permissions', 'groups')
+            return self.readonly_fields + ('user_permissions', 'groups', 'is_active')
         else:
-            return self.readonly_fields
+            return self.readonly_fields 
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         if db_field.name == 'user_type':
-            if request.user.user_type == str(CONST_TYPE_ADMIN):
-                kwargs['choices'] = ADMIN_TYPE + USER_TYPE
+            if request.user.user_type == CONST_TYPE_ADMIN:
+                kwargs['choices'] = ADMIN_TYPE + TEACHER_TYPE
+            if request.user.user_type == CONST_TYPE_TEACHER:
+                kwargs['choices'] = STUDENT_TYPE
 
         return super().formfield_for_choice_field(db_field, request, **kwargs)
 
@@ -219,8 +235,69 @@ class QuizDataAdmin(admin.ModelAdmin):
         return form
 
 @admin.register(Quiz)
-class Quizdmin(admin.ModelAdmin):
+class QuizAdmin(admin.ModelAdmin):
     filter_horizontal = ('quiz_datas',)
+
+@admin.register(Subject)
+class SubjectAdmin(admin.ModelAdmin):
+    list_display = ('subject_name', 'unit')
+    list_filter = ('subject_name', 'unit')
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    readonly_fields = ['teachers', ]
+
+    def teachers(self, obj):
+        #this_section = Section.objects.get(id=object_id)
+        this_teachers = Teacher.objects.filter(department=obj)
+        result = list()
+        for teacher in this_teachers:
+            result.append('{} - {} {}'.format(teacher.teacher_id, teacher.user.last_name, teacher.user.first_name))
+        return '\n'.join(result)
+    teachers.admin_order_field  = 'Teachers'  #Allows column order sorting
+    teachers.short_description = 'Teachers'  #Renames column head   
+
+@admin.register(Section)
+class SectionAdmin(admin.ModelAdmin):
+
+    readonly_fields = ['students', ]
+
+    def students(self, obj):
+        #this_section = Section.objects.get(id=object_id)
+        this_students = Student.objects.filter(section=obj)
+        result = list()
+        for student in this_students:
+            result.append('{} - {} {}'.format(student.scholar_no, student.user.last_name, student.user.first_name))
+        return '\n'.join(result)
+    students.admin_order_field  = 'Students'  #Allows column order sorting
+    students.short_description = 'Students'  #Renames column head   
+
+    #def change_view(self, request, object_id, form_url='', extra_context=None):
+    #    extra_context = extra_context or {}
+    #    this_section = Section.objects.get(id=object_id)
+    #    extra_context['Students'] = Student.objects.filter(section=this_section)
+
+    #    return super().change_view(request, object_id, form_url, extra_context=extra_context)
+
+@admin.register(Grade)
+class GradeAdmin(admin.ModelAdmin):
+    list_display = ('grade', 'student', 'subject', 'student_year', 'student_semester',)
+    list_filter = ('student', 'subject', 'student_year', 'student_semester',)
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.user_type == CONST_TYPE_STUDENT:
+            this_student = Student.objects.get(user=request.user)
+            return qs.filter(student=this_student)
+        else:
+            return qs
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and request.user.user_type == CONST_TYPE_STUDENT:
+            return self.readonly_fields + ('subject', )
+        else:
+            return self.readonly_fields 
+    
 
 @admin.register(AttendanceData)
 class AttendanceDatadmin(admin.ModelAdmin):

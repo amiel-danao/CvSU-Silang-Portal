@@ -168,10 +168,7 @@ BATON = {
     'MESSAGES_TOASTS': False,
     'GRAVATAR_DEFAULT_IMG': 'mp',
     'LOGIN_SPLASH': "/static/admin/images/login.jpg",
-    'SEARCH_FIELD': {
-        'label': 'Search contents...',
-        'url': '/search/',
-    },
+    
     'MENU': 
     (
         { 'type': 'title', 'label': 'main', 'apps': ('auth', 'fireapp') },
@@ -220,6 +217,12 @@ BATON = {
         			'label': 'Courses',
         			'type': 'model',
         			'app':'fireapp'
+        		},
+        		{
+        			'name': 'grade',
+        			'label': 'Grades',
+        			'type': 'model',
+        			'app':'fireapp'
         		}
         	]
         },
@@ -228,7 +231,8 @@ BATON = {
         
         #{ 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
         #{ 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
-        { 'type': 'free', 'label': 'My Account', 'url': '/fireapp/customuser/' },
+        { 'type': 'free', 'label': 'My Profile', 'url': '/fireapp/customuser/', 'perms': ('fireapp.is_student',) },
+        #{ 'type': 'free', 'label': 'Teacher Profile', 'url': '/fireapp/customuser/', 'perms': ('fireapp.is_teacher',) },
         #{ 'type': 'free', 'label': 'Manage', 'default_open': True, 'children': [
         #    { 'type': 'model', 'label': 'Courses', 'name': 'courses', 'app': 'fireapp' },
         #] }

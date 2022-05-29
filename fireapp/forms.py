@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from fireapp.models import ADMIN_TYPE, USER_TYPE, CustomUser
+from fireapp.models import ADMIN_TYPE, TEACHER_TYPE, CustomUser
 import logging
 
 logger = logging.getLogger('cvsu_logger')
@@ -26,7 +26,7 @@ class CustomAdminUserCreationForm(CustomUserCreateBaseForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        type_choices = ADMIN_TYPE + USER_TYPE
+        type_choices = ADMIN_TYPE + TEACHER_TYPE
         #type_choices.append(ADMIN_TYPE)
         self.fields['user_type'].choices = type_choices
 
