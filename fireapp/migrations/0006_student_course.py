@@ -7,13 +7,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('fireapp', '0005_grade_grade'),
+        ("fireapp", "0005_grade_grade"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='student',
-            name='course',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='fireapp.course'),
+            model_name="student",
+            name="course",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="fireapp.course",
+            ),
         ),
     ]

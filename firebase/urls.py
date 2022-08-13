@@ -19,8 +19,4 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-urlpatterns = [
-    path('baton/', include('baton.urls')),
-    path('', admin.site.urls)
-
-]
+urlpatterns = [path("baton/", include("baton.urls")), path("", admin.site.urls)]

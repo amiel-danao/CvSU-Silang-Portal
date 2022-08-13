@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('fireapp', '0004_alter_student_options_alter_teacher_options'),
+        ("fireapp", "0004_alter_student_options_alter_teacher_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='grade',
-            name='grade',
+            model_name="grade",
+            name="grade",
             field=models.PositiveSmallIntegerField(default=0),
         ),
     ]

@@ -1,0 +1,17 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    // "python.linting.pylintPath" : "pylint_django",
+    // "python.linting.pylintArgs": [
+    //     "--disable=C0111", // missing docstring
+    //     "--load-plugins=pylint_django",
+    // ],
+    "python.linting.flake8Enabled": true,
+    "editor.rulers": [
+        88
+    ],
+    "python.formatting.provider": "black",
+    "python.linting.flake8Args": [
+        "--max-line-length=88"
+    ]
+}

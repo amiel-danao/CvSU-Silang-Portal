@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('fireapp', '0003_alter_student_current_semester_and_more'),
+        ("fireapp", "0003_alter_student_current_semester_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='student',
-            options={'permissions': [('is_student', 'Student account')]},
+            name="student",
+            options={"permissions": [("is_student", "Student account")]},
         ),
         migrations.AlterModelOptions(
-            name='teacher',
-            options={'permissions': [('is_teacher', 'Teacher account')]},
+            name="teacher",
+            options={"permissions": [("is_teacher", "Teacher account")]},
         ),
     ]

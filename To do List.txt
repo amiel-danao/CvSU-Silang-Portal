@@ -1,0 +1,10 @@
+Password should not be in hash forms for the students 
+import/export final grades
+*Remove add subject to add course class
+
+*Remove quizzes to admin page
+
+*Remove Add of grades
+*Remove department to teacher panel 
+*Remove attendance data wala namang grade ang attendance
+Final grades nalang ilalagay

@@ -7,18 +7,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('fireapp', '0001_initial'),
+        ("fireapp", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='student',
-            name='current_semester',
-            field=models.IntegerField(default=1, validators=[django.core.validators.MaxValueValidator(4), django.core.validators.MinValueValidator(1)]),
+            model_name="student",
+            name="current_semester",
+            field=models.IntegerField(
+                default=1,
+                validators=[
+                    django.core.validators.MaxValueValidator(4),
+                    django.core.validators.MinValueValidator(1),
+                ],
+            ),
         ),
         migrations.AddField(
-            model_name='student',
-            name='current_year',
-            field=models.IntegerField(default=1, validators=[django.core.validators.MaxValueValidator(6), django.core.validators.MinValueValidator(1)]),
+            model_name="student",
+            name="current_year",
+            field=models.IntegerField(
+                default=1,
+                validators=[
+                    django.core.validators.MaxValueValidator(6),
+                    django.core.validators.MinValueValidator(1),
+                ],
+            ),
         ),
     ]

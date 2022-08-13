@@ -13,20 +13,21 @@ from fireapp.managers import CustomUserManager
 
 
 GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-    )
+    ("M", "Male"),
+    ("F", "Female"),
+)
 
 CONST_TYPE_ADMIN = 1
 CONST_TYPE_TEACHER = 2
 CONST_TYPE_STUDENT = 3
-ADMIN_TYPE = ((CONST_TYPE_ADMIN,"Admin"),)
-TEACHER_TYPE = ((CONST_TYPE_TEACHER,"Teacher"),)
-STUDENT_TYPE = ((CONST_TYPE_STUDENT,"Student"),)
+ADMIN_TYPE = ((CONST_TYPE_ADMIN, "Admin"),)
+TEACHER_TYPE = ((CONST_TYPE_TEACHER, "Teacher"),)
+STUDENT_TYPE = ((CONST_TYPE_STUDENT, "Student"),)
+
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_("email address"), unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -36,34 +37,39 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(default="", blank=False, max_length=50)
     middle_name = models.CharField(blank=True, max_length=50)
     last_name = models.CharField(default="", blank=False, max_length=50)
-    
-    user_type=models.PositiveSmallIntegerField(default=1, choices=TEACHER_TYPE + STUDENT_TYPE)
 
-    USERNAME_FIELD = 'email'
+    user_type = models.PositiveSmallIntegerField(
+        default=1, choices=TEACHER_TYPE + STUDENT_TYPE
+    )
+
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email        
+        return self.email
 
     class Meta:
         app_label = "fireapp"
         verbose_name = "User"
 
+
 class Section(models.Model):
-    id = models.BigAutoField(db_column='id', primary_key=True)
+    id = models.BigAutoField(db_column="id", primary_key=True)
     section_name = models.CharField(unique=True, max_length=100)
 
     def __str__(self):
         return self.section_name
 
+
 class Department(models.Model):
-    id = models.BigAutoField(db_column='dept_id', primary_key=True)
+    id = models.BigAutoField(db_column="dept_id", primary_key=True)
     name = models.CharField(unique=True, max_length=255)
 
     def __str__(self):
         return self.name
+
 
 class Subject(models.Model):
     subject_name = models.CharField(max_length=50)
@@ -72,15 +78,18 @@ class Subject(models.Model):
     def __str__(self):
         return self.subject_name
 
+
 class Course(models.Model):
-    id = models.BigAutoField(db_column='course_id', primary_key=True)
+    id = models.BigAutoField(db_column="course_id", primary_key=True)
     course_name = models.CharField(unique=True, max_length=100)
-    course_abbr = models.CharField(db_column='course_abbr', max_length=20, blank=True, default='')
+    course_abbr = models.CharField(
+        db_column="course_abbr", max_length=20, blank=True, default=""
+    )
     course_department = models.ForeignKey(
         Department,
         on_delete=models.SET_NULL,
-        db_column='course_department_id',
-        null=True
+        db_column="course_department_id",
+        null=True,
     )
     course_credit = models.PositiveSmallIntegerField()
 
@@ -91,22 +100,20 @@ class Course(models.Model):
 
 
 class Student(models.Model):
-    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='student', to_field='id')
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name="student",
+        to_field="id",
+    )
     scholar_no = models.CharField(unique=True, max_length=15)
     date_enrolled = models.DateField(default=django.utils.timezone.now)
     section = models.ForeignKey(
-        Section,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True
+        Section, on_delete=models.SET_NULL, blank=True, null=True
     )
 
-    course = models.ForeignKey(
-        Course,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True
-    )
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, blank=True, null=True)
 
     current_year = models.PositiveSmallIntegerField(
         default=1, validators=[MaxValueValidator(6), MinValueValidator(1)]
@@ -129,16 +136,18 @@ class Student(models.Model):
         ]
 
 
-
 class Teacher(models.Model):
-    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE, primary_key=True, related_name='teacher', to_field='id')
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name="teacher",
+        to_field="id",
+    )
     teacher_id = models.CharField(max_length=40, unique=True, null=True)
     sections = models.ManyToManyField(Section)
     department = models.ForeignKey(
-        Department,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True
+        Department, on_delete=models.SET_NULL, blank=True, null=True
     )
     subjects = models.ManyToManyField(Subject)
 
@@ -150,19 +159,13 @@ class Teacher(models.Model):
             ("is_teacher", "Teacher account"),
         ]
 
+
 class Grade(models.Model):
     id = models.BigAutoField(primary_key=True)
     grade = models.PositiveSmallIntegerField(default=0, blank=False)
 
-    student = models.ForeignKey(
-        Student,
-        on_delete=models.SET_NULL,
-        null=True
-    )
-    subject = models.ForeignKey(
-        Subject,
-        on_delete=models.SET_NULL,
-        null=True)
+    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
+    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True)
     student_year = models.PositiveSmallIntegerField(
         default=1, validators=[MaxValueValidator(6), MinValueValidator(1)]
     )
@@ -172,31 +175,39 @@ class Grade(models.Model):
     )
 
     class Meta:
-        unique_together = ('student', 'subject', 'student_year', 'student_semester')
+        unique_together = ("student", "subject", "student_year", "student_semester")
 
 
 class AttendanceData(models.Model):
     id = models.BigAutoField(primary_key=True)
     date = models.DateField(default=django.utils.timezone.now)
 
-    section = models.ForeignKey(
-        Section,
-        on_delete=models.SET_NULL,
-        null=True
-    )
+    section = models.ForeignKey(Section, on_delete=models.SET_NULL, null=True)
 
     students_attended = models.ManyToManyField(Student)
 
     class Meta:
-        unique_together = ('date', 'section',)
+        unique_together = (
+            "date",
+            "section",
+        )
 
-class QuizData(models.Model):    
+
+class QuizData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     score = models.IntegerField()
     date_taken = models.DateTimeField(null=False)
 
     def __str__(self):
-        return 'Quiz - (' + str(self.score) + ')' + self.student.user.first_name + ' ' + self.student.user.last_name
+        return (
+            "Quiz - ("
+            + str(self.score)
+            + ")"
+            + self.student.user.first_name
+            + " "
+            + self.student.user.last_name
+        )
+
 
 class Quiz(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -206,48 +217,51 @@ class Quiz(models.Model):
 
     class Meta:
         verbose_name_plural = "quizzes"
+
     def __str__(self):
         return self.name
 
 
-
-@receiver(post_save,sender=CustomUser)
-def create_user_profile(sender,instance,created,**kwargs):
+@receiver(post_save, sender=CustomUser)
+def create_user_profile(sender, instance, created, **kwargs):
     if created:
         if instance.user_type == CONST_TYPE_TEACHER:
-            new_teacher_id = str(date.today().year) + '-E' + str(instance.id).zfill(5)
+            new_teacher_id = str(date.today().year) + "-E" + str(instance.id).zfill(5)
             Teacher.objects.create(user=instance, teacher_id=new_teacher_id)
-            group = Group.objects.get(name='Teachers')
+            group = Group.objects.get(name="Teachers")
             if group:
                 instance.groups.add(group)
                 instance.save()
         if instance.user_type == CONST_TYPE_STUDENT:
-            new_scholar_no = str(date.today().year) + '-' + str(instance.id).zfill(5)
+            new_scholar_no = str(date.today().year) + "-" + str(instance.id).zfill(5)
             Student.objects.create(user=instance, scholar_no=new_scholar_no)
-            group = Group.objects.get(name='Students')
+            group = Group.objects.get(name="Students")
             if group:
                 instance.groups.add(group)
                 instance.save()
 
-@receiver(post_save,sender=CustomUser)
-def save_user_profile(sender,instance,**kwargs):
+
+@receiver(post_save, sender=CustomUser)
+def save_user_profile(sender, instance, **kwargs):
     if instance.user_type == CONST_TYPE_TEACHER:
         instance.teacher.save()
     if instance.user_type == CONST_TYPE_STUDENT:
         instance.student.save()
 
 
-@receiver(post_delete,sender=CustomUser)
-def delete_user(sender,instance,*args,**kwargs):
+@receiver(post_delete, sender=CustomUser)
+def delete_user(sender, instance, *args, **kwargs):
     if instance.user_type == CONST_TYPE_TEACHER:
         Teacher.objects.filter(user=instance).delete()
     if instance.user_type == CONST_TYPE_STUDENT:
         Student.objects.filter(user=instance).delete()
 
-@receiver(post_delete,sender=Student)
-def delete_student(sender,instance,*args,**kwargs):
+
+@receiver(post_delete, sender=Student)
+def delete_student(sender, instance, *args, **kwargs):
     CustomUser.objects.filter(id=instance.user.id).delete()
 
-@receiver(post_delete,sender=Teacher)
-def delete_teacher(sender,instance,*args,**kwargs):
+
+@receiver(post_delete, sender=Teacher)
+def delete_teacher(sender, instance, *args, **kwargs):
     CustomUser.objects.filter(id=instance.user.id).delete()
