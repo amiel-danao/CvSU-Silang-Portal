@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from datetime import date
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.core.validators import RegexValidator
 from fireapp.managers import CustomUserManager
 
 
@@ -23,10 +23,16 @@ CONST_TYPE_STUDENT = 3
 ADMIN_TYPE = ((CONST_TYPE_ADMIN, "Admin"),)
 TEACHER_TYPE = ((CONST_TYPE_TEACHER, "Teacher"),)
 STUDENT_TYPE = ((CONST_TYPE_STUDENT, "Student"),)
+ID_FORMAT_REGEX = RegexValidator(
+    r"[0-9]{6}-[0-9]{3}", "only valid student id is required"
+)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
+    uid = models.CharField(
+        _("uid"), max_length=10, validators=[ID_FORMAT_REGEX], unique=True
+    )
     email = models.EmailField(_("email address"), unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -42,7 +48,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         default=1, choices=TEACHER_TYPE + STUDENT_TYPE
     )
 
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "uid"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
@@ -162,7 +168,14 @@ class Teacher(models.Model):
 
 class Grade(models.Model):
     id = models.BigAutoField(primary_key=True)
-    grade = models.PositiveSmallIntegerField(default=0, blank=False)
+    grade = models.FloatField(
+        default=0, blank=False, validators=[MinValueValidator(0.0)]
+    )
+    average = models.FloatField(
+        default=0,
+        blank=False,
+        validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],
+    )
 
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True)
@@ -176,6 +189,9 @@ class Grade(models.Model):
 
     class Meta:
         unique_together = ("student", "subject", "student_year", "student_semester")
+
+    def __str__(self):
+        return str(self.student)
 
 
 class AttendanceData(models.Model):

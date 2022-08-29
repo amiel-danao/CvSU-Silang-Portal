@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.apps import apps
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from fireapp.managers import CustomUserManager
 from fireapp.models import (
     ADMIN_TYPE,
     CONST_TYPE_ADMIN,
@@ -23,8 +24,17 @@ from fireapp.models import (
 )
 from django.contrib.auth import get_user_model
 from .forms import CustomUserChangeForm, CustomUserCreateBaseForm
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+from django.core.exceptions import ObjectDoesNotExist
+from openpyxl import load_workbook
+import openpyxl
+from django.contrib.auth import get_user_model
 
 CustomUser = get_user_model()
+GRADE_WORKSHEET = "RAW GRADES"
+EXCEL_ROW_START_OFFSET = 10
+EXCEL_COL_START_OFFSET = 2
 
 
 @admin.register(Course)
@@ -194,6 +204,7 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     ordering = ("email",)
     list_display = (
+        "uid",
         "email",
         "first_name",
         "last_name",
@@ -204,7 +215,7 @@ class CustomUserAdmin(UserAdmin):
         "user_type",
         "is_active",
     )
-    search_fields = ("email", "first_name", "last_name")
+    search_fields = ("uid", "email", "first_name", "last_name")
     filter_horizontal = (
         "groups",
         "user_permissions",
@@ -379,11 +390,65 @@ class SectionAdmin(admin.ModelAdmin):
     students.short_description = "Students"  # Renames column head
 
 
+class GradeResource(resources.ModelResource):
+    class Meta:
+        model = Grade
+
+    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+        workbook = openpyxl.load_workbook(
+            kwargs["file_name"], read_only=True, data_only=True
+        )
+        worksheet = workbook.get_sheet_by_name(GRADE_WORKSHEET)
+
+        data = []
+
+        for row in worksheet.iter_rows(
+            min_row=EXCEL_ROW_START_OFFSET, min_col=EXCEL_COL_START_OFFSET
+        ):  # Offset for header
+            grade = Grade()
+            scholar_no = None
+            try:
+                scholar_no = row[0].value
+            except Exception:
+                pass
+            if scholar_no is None:
+                continue
+
+            student = None
+            try:
+                student = Student.objects.get(scholar_no=scholar_no)
+            except ObjectDoesNotExist:
+                User = get_user_model()
+                user = User.objects.create_student(
+                    email=scholar_no, password=scholar_no
+                )
+                full_name = row[1].value.strip().split(",")
+                user.last_name = full_name[0]
+                middle_initial = full_name[1][-2] if full_name[1][-1] == "." else ""
+                user.first_name = full_name[1].replace(f"{middle_initial}.", "").strip()
+                user.middle_name = middle_initial
+                user.save()
+                student = Student.objects.get(user=user)
+
+            grade.student = student
+            grade.student.scholar_no = scholar_no
+
+            grade.student.save()
+            grade.average = row[1].value
+            grade.grade = row[2].value
+            data.append(grade)
+
+        # Bulk create data
+        Grade.objects.bulk_create(data)
+
+
 @admin.register(Grade)
-class GradeAdmin(admin.ModelAdmin):
+class GradeAdmin(ImportExportModelAdmin):
+    resource_class = GradeResource
     list_display = (
-        "grade",
         "student",
+        "grade",
+        "average",
         "subject",
         "student_year",
         "student_semester",
@@ -408,8 +473,6 @@ class GradeAdmin(admin.ModelAdmin):
             return self.readonly_fields + ("subject",)
         else:
             return self.readonly_fields
-
-
 
 
 app_config = apps.get_app_config("fireapp")

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "baton.autodiscover",
+    "import_export",
 ]
 
 MIDDLEWARE = [
@@ -242,3 +243,5 @@ LOGGING = {
         },
     },
 }
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
