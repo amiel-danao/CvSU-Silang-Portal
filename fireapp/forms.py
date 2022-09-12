@@ -19,6 +19,7 @@ class CustomUserCreateBaseForm(LoggingMixin, UserCreationForm):
     class Meta:
         model = CustomUser
         fields = (
+            "uid",
             "email",
             "password1",
             "password2",
@@ -43,4 +44,4 @@ class CustomAdminUserCreationForm(CustomUserCreateBaseForm):
 class CustomUserChangeForm(LoggingMixin, UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ("email", "user_type", "groups", "user_permissions")
+        fields = ("uid", "email", "user_type", "groups", "user_permissions")

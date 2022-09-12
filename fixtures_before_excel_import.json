@@ -1,0 +1,204 @@
+[
+{
+    "model": "fireapp.department",
+    "pk": 1,
+    "fields": {
+        "name": "Information Technology"
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+        "name": "Teacher",
+        "permissions": [
+            [
+                "view_department",
+                "fireapp",
+                "department"
+            ],
+            [
+                "add_grade",
+                "fireapp",
+                "grade"
+            ],
+            [
+                "change_grade",
+                "fireapp",
+                "grade"
+            ],
+            [
+                "delete_grade",
+                "fireapp",
+                "grade"
+            ],
+            [
+                "view_grade",
+                "fireapp",
+                "grade"
+            ],
+            [
+                "add_quiz",
+                "fireapp",
+                "quiz"
+            ],
+            [
+                "change_quiz",
+                "fireapp",
+                "quiz"
+            ],
+            [
+                "delete_quiz",
+                "fireapp",
+                "quiz"
+            ],
+            [
+                "view_quiz",
+                "fireapp",
+                "quiz"
+            ],
+            [
+                "add_quizdata",
+                "fireapp",
+                "quizdata"
+            ],
+            [
+                "change_quizdata",
+                "fireapp",
+                "quizdata"
+            ],
+            [
+                "delete_quizdata",
+                "fireapp",
+                "quizdata"
+            ],
+            [
+                "view_quizdata",
+                "fireapp",
+                "quizdata"
+            ],
+            [
+                "add_section",
+                "fireapp",
+                "section"
+            ],
+            [
+                "change_section",
+                "fireapp",
+                "section"
+            ],
+            [
+                "delete_section",
+                "fireapp",
+                "section"
+            ],
+            [
+                "view_section",
+                "fireapp",
+                "section"
+            ],
+            [
+                "add_student",
+                "fireapp",
+                "student"
+            ],
+            [
+                "change_student",
+                "fireapp",
+                "student"
+            ],
+            [
+                "delete_student",
+                "fireapp",
+                "student"
+            ],
+            [
+                "is_student",
+                "fireapp",
+                "student"
+            ],
+            [
+                "view_student",
+                "fireapp",
+                "student"
+            ],
+            [
+                "add_subject",
+                "fireapp",
+                "subject"
+            ],
+            [
+                "change_subject",
+                "fireapp",
+                "subject"
+            ],
+            [
+                "delete_subject",
+                "fireapp",
+                "subject"
+            ],
+            [
+                "view_subject",
+                "fireapp",
+                "subject"
+            ],
+            [
+                "view_teacher",
+                "fireapp",
+                "teacher"
+            ]
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+        "name": "Students",
+        "permissions": [
+            [
+                "view_grade",
+                "fireapp",
+                "grade"
+            ],
+            [
+                "view_quiz",
+                "fireapp",
+                "quiz"
+            ],
+            [
+                "view_quizdata",
+                "fireapp",
+                "quizdata"
+            ],
+            [
+                "view_student",
+                "fireapp",
+                "student"
+            ]
+        ]
+    }
+},
+{
+    "model": "fireapp.customuser",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$320000$6NnOq8fNaCfY3XejlWqJe3$f2VyS+lUBFI43TNhmb2hrlkytvBAOhtB+OJpL/tJMpU=",
+        "last_login": "2022-08-31T09:10:47.477Z",
+        "is_superuser": true,
+        "uid": "123456-789",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2022-08-31T09:10:36.783Z",
+        "gender": "M",
+        "birth_date": "2022-08-31",
+        "first_name": "",
+        "middle_name": "",
+        "last_name": "",
+        "user_type": 1,
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]

@@ -1,0 +1,13 @@
+Instructions that the django dumb developers forgot to mention:
+
+dumpdata:
+python manage.py dumpdata --natural-foreign --exclude contenttypes --exclude auth.permission --exclude admin.logentry --exclude sessions.session --indent 4 > fixture.json
+
+loaddata:
+
+python manage.py shell
+
+from django.contrib.contenttypes.models import ContentType
+ContentType.objects.all().delete()
+
+python manage.py loaddata db.json --exclude=auth.permission --exclude=contenttypes --exclude=fireapp.student --exclude=fireapp.quizdata --exclude=fireapp.teacher --exclude=fireapp.grade --ignorenonexistent --exclude=admin.logentry

@@ -10,7 +10,7 @@ from datetime import date
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
 from fireapp.managers import CustomUserManager
-
+from django.core.exceptions import ValidationError
 
 GENDER_CHOICES = (
     ("M", "Male"),
@@ -23,17 +23,37 @@ CONST_TYPE_STUDENT = 3
 ADMIN_TYPE = ((CONST_TYPE_ADMIN, "Admin"),)
 TEACHER_TYPE = ((CONST_TYPE_TEACHER, "Teacher"),)
 STUDENT_TYPE = ((CONST_TYPE_STUDENT, "Student"),)
-ID_FORMAT_REGEX = RegexValidator(
-    r"[0-9]{6}-[0-9]{3}", "only valid student id is required"
-)
+
+validator_fn = [
+    RegexValidator(r"[0-9]{6}-[0-9]{3}", "only valid id number is required"),
+    RegexValidator(r"[0-9]{4}-[0-9]{2}-[0-9]{3}", "only valid id number is required"),
+]
+
+
+def regex_validators(value):
+    err = None
+    for validator in validator_fn:
+        try:
+            validator(value)
+            # Valid value, return it
+            return value
+        except ValidationError as exc:
+            err = exc
+    # Value match nothing, raise error
+    raise err
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     uid = models.CharField(
-        _("uid"), max_length=10, validators=[ID_FORMAT_REGEX], unique=True
+        verbose_name="id",
+        max_length=10,
+        validators=[
+            regex_validators,
+        ],
+        unique=True,
     )
-    email = models.EmailField(_("email address"), unique=True)
+    email = models.EmailField(_("email address"), blank=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -193,20 +213,9 @@ class Grade(models.Model):
     def __str__(self):
         return str(self.student)
 
-
-class AttendanceData(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    date = models.DateField(default=django.utils.timezone.now)
-
-    section = models.ForeignKey(Section, on_delete=models.SET_NULL, null=True)
-
-    students_attended = models.ManyToManyField(Student)
-
-    class Meta:
-        unique_together = (
-            "date",
-            "section",
-        )
+    def save(self, *args, **kwargs):
+        self.average = round(self.average, 2)
+        super(Grade, self).save(*args, **kwargs)
 
 
 class QuizData(models.Model):
