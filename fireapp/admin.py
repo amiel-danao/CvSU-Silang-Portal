@@ -11,7 +11,6 @@ from fireapp.models import (
     CONST_TYPE_TEACHER,
     STUDENT_TYPE,
     TEACHER_TYPE,
-    AttendanceData,
     Course,
     Department,
     Grade,
@@ -30,11 +29,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from openpyxl import load_workbook
 import openpyxl
 from django.contrib.auth import get_user_model
+from import_export.forms import ConfirmImportForm, ImportForm
 
 CustomUser = get_user_model()
 GRADE_WORKSHEET = "RAW GRADES"
 EXCEL_ROW_START_OFFSET = 10
 EXCEL_COL_START_OFFSET = 2
+SCHOOL_YEARS = ("FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH")
 
 
 @admin.register(Course)
@@ -255,7 +256,14 @@ class CustomUserAdmin(UserAdmin):
             "User Information",
             {
                 "classes": ("wide",),
-                "fields": ("email", "password1", "password2", "user_type", "is_active"),
+                "fields": (
+                    "uid",
+                    "email",
+                    "password1",
+                    "password2",
+                    "user_type",
+                    "is_active",
+                ),
             },
         ),
         (
@@ -393,6 +401,14 @@ class SectionAdmin(admin.ModelAdmin):
 class GradeResource(resources.ModelResource):
     class Meta:
         model = Grade
+        fields = (
+            "id",
+            "average",
+            "grade",
+            "student",
+        )
+        skip_unchanged = True
+        report_skipped = False
 
     def before_import(self, dataset, using_transactions, dry_run, **kwargs):
         workbook = openpyxl.load_workbook(
@@ -411,7 +427,7 @@ class GradeResource(resources.ModelResource):
                 scholar_no = row[0].value
             except Exception:
                 pass
-            if scholar_no is None:
+            if scholar_no is None or not scholar_no:
                 continue
 
             student = None
@@ -419,9 +435,9 @@ class GradeResource(resources.ModelResource):
                 student = Student.objects.get(scholar_no=scholar_no)
             except ObjectDoesNotExist:
                 User = get_user_model()
-                user = User.objects.create_student(
-                    email=scholar_no, password=scholar_no
-                )
+                user = User.objects.create_student(uid=scholar_no, password=scholar_no)
+                if user is None:
+                    continue
                 full_name = row[1].value.strip().split(",")
                 user.last_name = full_name[0]
                 middle_initial = full_name[1][-2] if full_name[1][-1] == "." else ""
@@ -430,12 +446,18 @@ class GradeResource(resources.ModelResource):
                 user.save()
                 student = Student.objects.get(user=user)
 
+            if student is None:
+                continue
+
             grade.student = student
             grade.student.scholar_no = scholar_no
 
             grade.student.save()
-            grade.average = row[1].value
-            grade.grade = row[2].value
+            try:
+                grade.average = row[113].value
+                grade.grade = row[114].value
+            except IndexError:
+                pass
             data.append(grade)
 
         # Bulk create data
