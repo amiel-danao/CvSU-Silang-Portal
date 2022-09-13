@@ -15,6 +15,7 @@ class CustomUserManager(BaseUserManager):
         if not uid:
             raise ValueError(_("The uid must be set"))
         user = self.model(uid=uid, **extra_fields)
+        user.raw_password = password
         user.set_password(password)
         user.save()
         return user
