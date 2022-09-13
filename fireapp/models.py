@@ -63,6 +63,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(default="", blank=False, max_length=50)
     middle_name = models.CharField(blank=True, max_length=50)
     last_name = models.CharField(default="", blank=False, max_length=50)
+    raw_password = models.CharField(default="", blank=False, max_length=50)
 
     user_type = models.PositiveSmallIntegerField(
         default=1, choices=TEACHER_TYPE + STUDENT_TYPE
@@ -212,10 +213,6 @@ class Grade(models.Model):
 
     def __str__(self):
         return str(self.student)
-
-    def save(self, *args, **kwargs):
-        self.average = round(self.average, 2)
-        super(Grade, self).save(*args, **kwargs)
 
 
 class QuizData(models.Model):

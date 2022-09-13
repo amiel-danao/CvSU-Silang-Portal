@@ -24,18 +24,18 @@ from fireapp.models import (
 from django.contrib.auth import get_user_model
 from .forms import CustomUserChangeForm, CustomUserCreateBaseForm
 from import_export import resources
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportModelAdmin, ImportMixin
 from django.core.exceptions import ObjectDoesNotExist
 from openpyxl import load_workbook
 import openpyxl
 from django.contrib.auth import get_user_model
-from import_export.forms import ConfirmImportForm, ImportForm
 
 CustomUser = get_user_model()
 GRADE_WORKSHEET = "RAW GRADES"
+SEMESTRAL_WORKSHEET = "SEMESTRAL GRADE"
 EXCEL_ROW_START_OFFSET = 10
 EXCEL_COL_START_OFFSET = 2
-SCHOOL_YEARS = ("FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH")
+SCHOOL_YEARS_SEMESTER = ("", "FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH")
 
 
 @admin.register(Course)
@@ -235,7 +235,7 @@ class CustomUserAdmin(UserAdmin):
             return qs
 
     fieldsets = (
-        ("User Information", {"fields": ("email", "password", "_user_type")}),
+        ("User Information", {"fields": ("email", "_user_type")}),
         (
             "Personal Information",
             {
@@ -414,11 +414,23 @@ class GradeResource(resources.ModelResource):
         workbook = openpyxl.load_workbook(
             kwargs["file_name"], read_only=True, data_only=True
         )
-        worksheet = workbook.get_sheet_by_name(GRADE_WORKSHEET)
+
+        semestral_worksheet = workbook.get_sheet_by_name(SEMESTRAL_WORKSHEET)
+        grades_worksheet = workbook.get_sheet_by_name(GRADE_WORKSHEET)
+
+        year = 1
+        semester = 1
+        try:
+            school_year = semestral_worksheet.cell(row=17, column=3).value
+            year = SCHOOL_YEARS_SEMESTER.index(school_year.split(" ")[0])
+            school_semester = semestral_worksheet.cell(row=19, column=3).value
+            semester = SCHOOL_YEARS_SEMESTER.index(school_semester.split(" ")[0])
+        except IndexError:
+            pass
 
         data = []
 
-        for row in worksheet.iter_rows(
+        for row in grades_worksheet.iter_rows(
             min_row=EXCEL_ROW_START_OFFSET, min_col=EXCEL_COL_START_OFFSET
         ):  # Offset for header
             grade = Grade()
@@ -453,8 +465,11 @@ class GradeResource(resources.ModelResource):
             grade.student.scholar_no = scholar_no
 
             grade.student.save()
+            grade.student_year = year
+            grade.student_semester = semester
             try:
-                grade.average = row[113].value
+                average = row[113].value
+                grade.average = round(average, 2)
                 grade.grade = row[114].value
             except IndexError:
                 pass
@@ -465,7 +480,7 @@ class GradeResource(resources.ModelResource):
 
 
 @admin.register(Grade)
-class GradeAdmin(ImportExportModelAdmin):
+class GradeAdmin(ImportMixin, admin.ModelAdmin):
     resource_class = GradeResource
     list_display = (
         "student",
