@@ -29,6 +29,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from openpyxl import load_workbook
 import openpyxl
 from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
+from django.views.decorators.http import require_POST
+from django.utils.encoding import force_str
+from django.utils.decorators import method_decorator
+from io import BytesIO
+
 
 CustomUser = get_user_model()
 GRADE_WORKSHEET = "RAW GRADES"
@@ -410,11 +416,77 @@ class GradeResource(resources.ModelResource):
         skip_unchanged = True
         report_skipped = False
 
-    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
-        workbook = openpyxl.load_workbook(
-            kwargs["file_name"], read_only=True, data_only=True
-        )
 
+@admin.register(Grade)
+class GradeAdmin(ImportMixin, admin.ModelAdmin):
+    resource_class = GradeResource
+    list_display = (
+        "student",
+        "grade",
+        "average",
+        "subject",
+        "student_year",
+        "student_semester",
+    )
+    list_filter = (
+        "student",
+        "subject",
+        "student_year",
+        "student_semester",
+    )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.user_type == CONST_TYPE_STUDENT:
+            this_student = Student.objects.get(user=request.user)
+            return qs.filter(student=this_student)
+        else:
+            return qs
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and request.user.user_type == CONST_TYPE_STUDENT:
+            return self.readonly_fields + ("subject",)
+        else:
+            return self.readonly_fields
+
+    @method_decorator(require_POST)
+    def process_import(self, request, *args, **kwargs):
+        """
+        Perform the actual import action (after the user has confirmed the import)
+        """
+        if not self.has_import_permission(request):
+            raise PermissionDenied
+
+        form_type = self.get_confirm_import_form()
+        confirm_form = form_type(request.POST)
+        if confirm_form.is_valid():
+            import_formats = self.get_import_formats()
+            input_format = import_formats[
+                int(confirm_form.cleaned_data["input_format"])
+            ]()
+            tmp_storage = self.get_tmp_storage_class()(
+                name=confirm_form.cleaned_data["import_file_name"]
+            )
+            data = tmp_storage.read(input_format.get_read_mode())
+            if not input_format.is_binary() and self.from_encoding:
+                data = force_str(data, self.from_encoding)
+            dataset = input_format.create_dataset(data)
+
+            workbook = load_workbook(
+                filename=BytesIO(data), read_only=True, data_only=True
+            )
+
+            self.process_excel(workbook)
+
+            result = self.process_dataset(
+                dataset, confirm_form, request, *args, **kwargs
+            )
+
+            tmp_storage.remove()
+
+            return self.process_result(result, request)
+
+    def process_excel(self, workbook):
         semestral_worksheet = workbook.get_sheet_by_name(SEMESTRAL_WORKSHEET)
         grades_worksheet = workbook.get_sheet_by_name(GRADE_WORKSHEET)
 
@@ -477,39 +549,6 @@ class GradeResource(resources.ModelResource):
 
         # Bulk create data
         Grade.objects.bulk_create(data)
-
-
-@admin.register(Grade)
-class GradeAdmin(ImportMixin, admin.ModelAdmin):
-    resource_class = GradeResource
-    list_display = (
-        "student",
-        "grade",
-        "average",
-        "subject",
-        "student_year",
-        "student_semester",
-    )
-    list_filter = (
-        "student",
-        "subject",
-        "student_year",
-        "student_semester",
-    )
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        if request.user.user_type == CONST_TYPE_STUDENT:
-            this_student = Student.objects.get(user=request.user)
-            return qs.filter(student=this_student)
-        else:
-            return qs
-
-    def get_readonly_fields(self, request, obj=None):
-        if obj and request.user.user_type == CONST_TYPE_STUDENT:
-            return self.readonly_fields + ("subject",)
-        else:
-            return self.readonly_fields
 
 
 app_config = apps.get_app_config("fireapp")
