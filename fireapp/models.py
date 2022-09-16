@@ -47,7 +47,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     uid = models.CharField(
         verbose_name="id",
-        max_length=10,
+        max_length=11,
         validators=[
             regex_validators,
         ],
@@ -80,6 +80,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         app_label = "fireapp"
         verbose_name = "User"
+
+    def set_password(self, raw_password):
+        super().set_password(raw_password)
+        self.raw_password = raw_password
 
 
 class Section(models.Model):
