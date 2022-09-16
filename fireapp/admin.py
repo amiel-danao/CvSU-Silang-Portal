@@ -517,7 +517,7 @@ class GradeAdmin(ImportMixin, admin.ModelAdmin):
             student = None
             try:
                 student = Student.objects.get(scholar_no=scholar_no)
-            except ObjectDoesNotExist:
+            except Student.DoesNotExist:
                 User = get_user_model()
                 user = User.objects.create_student(uid=scholar_no, password=scholar_no)
                 if user is None:
