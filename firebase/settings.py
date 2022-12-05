@@ -88,6 +88,9 @@ if os.environ.get("DJANGO_ENV") == "LOCAL":
             "PASSWORD": "",
             "HOST": "127.0.0.1",
             "PORT": "3333",
+            "OPTIONS": {
+                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
         }
     }
 else:
@@ -99,6 +102,9 @@ else:
             "PASSWORD": "notcommonpassword1234",
             "HOST": "csvu.mysql.pythonanywhere-services.com",
             "PORT": "3306",
+            "OPTIONS": {
+                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
         }
     }
 

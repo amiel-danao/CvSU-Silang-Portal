@@ -199,11 +199,13 @@ class Grade(models.Model):
     average = models.FloatField(
         default=0,
         blank=False,
-        validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],
+        validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
     )
 
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
-    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True)
+    subject = models.ForeignKey(
+        Subject, on_delete=models.SET_NULL, null=True, blank=True
+    )
     student_year = models.PositiveSmallIntegerField(
         default=1, validators=[MaxValueValidator(6), MinValueValidator(1)]
     )
