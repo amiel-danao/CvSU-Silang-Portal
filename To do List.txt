@@ -8,3 +8,6 @@ import/export final grades
 *Remove department to teacher panel 
 *Remove attendance data wala namang grade ang attendance
 Final grades nalang ilalagay
+
+
+Add Failed Column

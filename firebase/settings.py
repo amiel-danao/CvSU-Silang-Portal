@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-5%(rt_(_f1(eec4u@2k)l#@dud=k2sx%_=i!^%n$&z^=c0zwlx"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "csvu.pythonanywhere.com"]
 
@@ -87,7 +87,7 @@ if os.environ.get("DJANGO_ENV") == "LOCAL":
             "USER": "root",
             "PASSWORD": "",
             "HOST": "127.0.0.1",
-            "PORT": "3306",
+            "PORT": "3333",
         }
     }
 else:
@@ -245,3 +245,5 @@ LOGGING = {
 }
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+LOGIN_REDIRECT_URL = "/fireapp/grade/"
+LOGIN_URL = "/admin/login/"

@@ -42,6 +42,7 @@ SEMESTRAL_WORKSHEET = "SEMESTRAL GRADE"
 EXCEL_ROW_START_OFFSET = 10
 EXCEL_COL_START_OFFSET = 2
 SCHOOL_YEARS_SEMESTER = ("", "FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH")
+EXEMPTED_MODELS = (Quiz, QuizData)
 
 
 @admin.register(Course)
@@ -337,22 +338,22 @@ class CustomUserAdmin(UserAdmin):
         obj.save()
 
 
-@admin.register(QuizData)
-class QuizDataAdmin(admin.ModelAdmin):
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        form.base_fields["student"].widget.can_add_related = False
-        form.base_fields["student"].widget.can_delete_related = False
-        form.base_fields["student"].widget.can_change_related = False
-        return form
+# @admin.register(QuizData)
+# class QuizDataAdmin(admin.ModelAdmin):
+#     def get_form(self, request, obj=None, **kwargs):
+#         form = super().get_form(request, obj, **kwargs)
+#         form.base_fields["student"].widget.can_add_related = False
+#         form.base_fields["student"].widget.can_delete_related = False
+#         form.base_fields["student"].widget.can_change_related = False
+#         return form
 
 
-@admin.register(Quiz)
-class QuizAdmin(admin.ModelAdmin):
-    filter_horizontal = ("quiz_datas",)
+# @admin.register(Quiz)
+# class QuizAdmin(admin.ModelAdmin):
+#     filter_horizontal = ("quiz_datas",)
 
-    def has_module_permission(self, request):
-        return not request.user.is_superuser
+#     def has_module_permission(self, request):
+#         return not request.user.is_superuser
 
 
 @admin.register(Subject)
@@ -434,6 +435,11 @@ class GradeAdmin(ImportMixin, admin.ModelAdmin):
         "student_year",
         "student_semester",
     )
+
+    def has_import_permission(self, request):
+        if request.user.user_type == CONST_TYPE_STUDENT:
+            return False
+        return True
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -553,7 +559,12 @@ app_config = apps.get_app_config("fireapp")
 models = app_config.get_models()
 
 for model in models:
+    if model.__class__ in EXEMPTED_MODELS:
+        continue
     try:
         admin.site.register(model)
     except admin.sites.AlreadyRegistered:
         pass
+
+admin.site.unregister(Quiz)
+admin.site.unregister(QuizData)

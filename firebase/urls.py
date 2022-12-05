@@ -18,8 +18,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from fireapp import views
+from django.urls import re_path as url
 
 urlpatterns = [
     path("baton/", include("baton.urls")),
     path("", admin.site.urls),
+    url(r"^login$", views.MyLoginView.as_view()),
 ]

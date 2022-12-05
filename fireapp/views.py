@@ -4,6 +4,11 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.views import LoginView
+from django.shortcuts import render, HttpResponseRedirect
+from django.urls import reverse
 
 
 @login_required
@@ -17,15 +22,14 @@ def password_change(request):
         pass
 
 
-# def change_password(request):
-#     if request.method == "POST":
-#         form = PasswordChangeForm(request.user, data=request.POST)
-#         if form.is_valid():
-#             form.save()
-#             update_session_auth_hash(request, form.user)  # dont logout the user.
-#             messages.success(request, "Password changed.")
-#             return redirect("/")
-#     else:
-#         form = PasswordChangeForm(request.user)
-#     data = {"form": form}
-#     return render(request, "accounts/change_password.html", data)
+class MyLoginView(LoginView):
+    def form_valid(self, form):
+        """Security check complete. Log the user in."""
+        auth_login(self.request, form.get_user())
+        next_url = self.request.GET.get("next")
+        if next_url:
+            return HttpResponseRedirect(next_url)
+        else:
+            return render(self.request, "/")
+
+        # return HttpResponseRedirect(self.get_success_url())
