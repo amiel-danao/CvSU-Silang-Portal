@@ -499,7 +499,7 @@ class GradeAdmin(ImportMixin, admin.ModelAdmin):
         year = 1
         semester = 1
         try:
-            school_year = semestral_worksheet.cell(row=17, column=3).value
+            school_year = str(semestral_worksheet.cell(row=17, column=3).value).upper()
             year = SCHOOL_YEARS_SEMESTER.index(school_year.split(" ")[0])
             school_semester = semestral_worksheet.cell(row=19, column=3).value
             semester = SCHOOL_YEARS_SEMESTER.index(school_semester.split(" ")[0])
