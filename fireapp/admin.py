@@ -60,7 +60,10 @@ class CourseAdmin(admin.ModelAdmin):
 
     @admin.display(description="Department Name", ordering="department__name")
     def get_department_name(self, obj):
-        return obj.course_department.name
+        if obj.course_department is not None:
+            return obj.course_department.name
+        else:
+            return ''
 
     def save_related(self, request, form, formsets, change):
         obj = form.instance
