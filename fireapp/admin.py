@@ -430,6 +430,7 @@ class GradeAdmin(ImportMixin, admin.ModelAdmin):
         "student_year",
         "student_semester",
     )
+    exclude = ('average', )
     list_filter = (
         "student",
         "subject",

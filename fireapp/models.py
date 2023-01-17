@@ -198,7 +198,7 @@ class Grade(models.Model):
     )
     average = models.FloatField(
         default=0,
-        blank=False,
+        blank=True,
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
     )
 
