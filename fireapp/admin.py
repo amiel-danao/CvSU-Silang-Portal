@@ -413,7 +413,6 @@ class GradeResource(resources.ModelResource):
         model = Grade
         fields = (
             "id",
-            "average",
             "grade",
             "student",
         )
@@ -427,7 +426,6 @@ class GradeAdmin(ImportMixin, admin.ModelAdmin):
     list_display = (
         "student",
         "grade",
-        "average",
         "subject",
         "student_year",
         "student_semester",
