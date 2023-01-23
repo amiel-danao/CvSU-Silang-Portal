@@ -253,3 +253,4 @@ LOGGING = {
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 LOGIN_REDIRECT_URL = "/fireapp/grade/"
 LOGIN_URL = "/admin/login/"
+

@@ -61,12 +61,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     gender = models.CharField(default="M", max_length=1, choices=GENDER_CHOICES)
     birth_date = models.DateField(default=django.utils.timezone.now)
     first_name = models.CharField(default="", blank=False, max_length=50)
-    middle_name = models.CharField(blank=True, max_length=50)
+    middle_name = models.CharField(blank=True, max_length=50, null=True)
     last_name = models.CharField(default="", blank=False, max_length=50)
     raw_password = models.CharField(default="", blank=False, max_length=50)
 
     user_type = models.PositiveSmallIntegerField(
-        default=1, choices=TEACHER_TYPE + STUDENT_TYPE
+        default=CONST_TYPE_STUDENT, choices=TEACHER_TYPE + STUDENT_TYPE
     )
 
     USERNAME_FIELD = "uid"
@@ -261,20 +261,34 @@ def create_user_profile(sender, instance, created, **kwargs):
                 instance.groups.add(group)
                 instance.save()
         if instance.user_type == CONST_TYPE_STUDENT:
-            new_scholar_no = str(date.today().year) + "-" + str(instance.id).zfill(5)
-            Student.objects.create(user=instance, scholar_no=new_scholar_no)
+            # today = timezone.now()
+            # semester = get_semester_by_date(today)
+            # new_scholar_no = f'{str(today.year)}-{semester}-{str(instance.id).zfill(3)}'
+            existing_profile = Student.objects.filter(scholar_no=instance.uid).first()
+            if existing_profile is None:
+                Student.objects.create(user=instance, scholar_no=instance.uid)
             group = Group.objects.get(name="Students")
             if group:
                 instance.groups.add(group)
                 instance.save()
 
+    else:
+        if instance.user_type == CONST_TYPE_TEACHER:
+            instance.teacher.save()
+        if instance.user_type == CONST_TYPE_STUDENT:
+            instance.student.save()
 
-@receiver(post_save, sender=CustomUser)
-def save_user_profile(sender, instance, **kwargs):
-    if instance.user_type == CONST_TYPE_TEACHER:
-        instance.teacher.save()
-    if instance.user_type == CONST_TYPE_STUDENT:
-        instance.student.save()
+
+def get_semester_by_date(date_value):
+    return '02' if date_value.month >= 6 else '01'
+
+
+# @receiver(post_save, sender=CustomUser)
+# def save_user_profile(sender, instance, **kwargs):
+#     if instance.user_type == CONST_TYPE_TEACHER:
+#         instance.teacher.save()
+#     if instance.user_type == CONST_TYPE_STUDENT:
+#         instance.student.save()
 
 
 @receiver(post_delete, sender=CustomUser)

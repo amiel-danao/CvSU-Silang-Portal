@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from fireapp.models import ADMIN_TYPE, TEACHER_TYPE, CustomUser
+from fireapp.models import ADMIN_TYPE, STUDENT_TYPE, TEACHER_TYPE, CustomUser
 import logging
 
 logger = logging.getLogger("cvsu_logger")
