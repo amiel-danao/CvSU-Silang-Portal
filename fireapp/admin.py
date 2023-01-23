@@ -758,7 +758,7 @@ class CustomUserAdmin(ImportExportModelAdmin, UserAdmin):
     )
     # inlines = []
     exclude = ("is_superuser", "last_login", "date_joined")
-    readonly_fields = ("uid", "_user_type",)
+    readonly_fields = ("_user_type",)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -770,7 +770,7 @@ class CustomUserAdmin(ImportExportModelAdmin, UserAdmin):
             return qs
 
     fieldsets = (
-        ("User Information", {"fields": ("email", "uid","_user_type")}),
+        ("User Information", {"fields": ("email", "uid", "_user_type")}),
         (
             "Personal Information",
             {
