@@ -1,0 +1,130 @@
+[
+{
+    "model": "fireapp.customuser",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$320000$AsSnBkD2wf47TgW2jpbS0B$Qaw1Ab0LrihVs39RgmylOybbb6w3JCgTq+VuHt6HOJs=",
+        "last_login": "2023-01-23T00:46:47.938Z",
+        "is_superuser": true,
+        "uid": "202202-1234",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2023-01-14T14:37:49.874Z",
+        "gender": "M",
+        "birth_date": "2023-01-14",
+        "first_name": "",
+        "middle_name": "",
+        "last_name": "",
+        "raw_password": "202202-1234",
+        "user_type": 1,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "fireapp.customuser",
+    "pk": 7,
+    "fields": {
+        "password": "pbkdf2_sha256$320000$WPiEJvhmiFUcDhZ3neO2NA$+jGZH7axrpzJtbJKFhgU8sUsvmDZRaeXldU9i+D7xK8=",
+        "last_login": "2023-01-23T00:36:29.868Z",
+        "is_superuser": false,
+        "uid": "202202-4321",
+        "email": "teacher1@email.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2023-01-14T14:54:00.677Z",
+        "gender": "M",
+        "birth_date": "2023-01-14",
+        "first_name": "Teacher1 First Name",
+        "middle_name": "",
+        "last_name": "Teacher1 Last Name",
+        "raw_password": "notCommonPassword123$",
+        "user_type": 2,
+        "groups": [
+            1
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "fireapp.customuser",
+    "pk": 10,
+    "fields": {
+        "password": "pbkdf2_sha256$320000$7S4ICcTFeB656QuNpehctD$svz8OYG+B0PftbxA2y9Bmy/xOA/0gGBmd/gByBp4Rvw=",
+        "last_login": null,
+        "is_superuser": false,
+        "uid": "2023-02-091",
+        "email": "newstudent@email.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2023-01-22T12:24:03.884Z",
+        "gender": "M",
+        "birth_date": "2023-01-22",
+        "first_name": "Student1_firstname",
+        "middle_name": null,
+        "last_name": "Student1_lastname",
+        "raw_password": "2023-02-091",
+        "user_type": 3,
+        "groups": [
+            2
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "fireapp.customuser",
+    "pk": 11,
+    "fields": {
+        "password": "pbkdf2_sha256$320000$4ZlBrO46gi4uoTUOQwWwyu$KXMlwEgwe6MqDxieb8BxKG/xf3jsg4iDF1PUOhOcWao=",
+        "last_login": "2023-01-23T00:43:32Z",
+        "is_superuser": false,
+        "uid": "2023-02-092",
+        "email": "newstudent@email.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2023-01-22T23:36:06.872Z",
+        "gender": "M",
+        "birth_date": "2023-01-23",
+        "first_name": "Student2_firstname",
+        "middle_name": "student2_middlename",
+        "last_name": "Student2_lastname",
+        "raw_password": "2023-02-092",
+        "user_type": 3,
+        "groups": [
+            2
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "fireapp.student",
+    "pk": 10,
+    "fields": {
+        "scholar_no": "2023-02-091",
+        "date_enrolled": "2023-01-22",
+        "section": 1,
+        "course": 1,
+        "current_year": 1,
+        "current_semester": 1,
+        "mobile": 9063720754,
+        "parents_mobile": 9954261220,
+        "home_address": "my home address 1234"
+    }
+},
+{
+    "model": "fireapp.student",
+    "pk": 11,
+    "fields": {
+        "scholar_no": "2023-02-092",
+        "date_enrolled": "2023-01-23",
+        "section": null,
+        "course": 1,
+        "current_year": 1,
+        "current_semester": 1,
+        "mobile": 9063720754,
+        "parents_mobile": 9954261220,
+        "home_address": "my home address 1235"
+    }
+}
+]

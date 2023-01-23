@@ -942,6 +942,23 @@ class GradeAdmin(ImportMixin, admin.ModelAdmin):
         "student_semester",
     )
 
+    def get_list_filter(self, request):
+        list_filter = list(self.list_filter)
+        if request.user.user_type == CONST_TYPE_STUDENT:
+            list_filter.remove("student")
+
+        return list_filter
+
+    def get_list_display(self, request):
+        """ Removes the E column unless "Yes" has been selected in the 
+            dummy filter.
+        """
+        list_display = list(self.list_display)
+        if request.user.user_type == CONST_TYPE_STUDENT:
+            list_display.remove("student")
+
+        return list_display
+
     def has_import_permission(self, request):
         if request.user.user_type == CONST_TYPE_STUDENT:
             return False
